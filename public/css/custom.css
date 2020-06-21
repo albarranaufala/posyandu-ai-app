@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Source+Sans+Pro&display=swap');
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.login-container {
+    min-height: 100vh;
+    padding: 1em;
+    background-color: #f3f2ff;
+}
+
+.login-image {
+    background: rgb(14, 9, 121);
+    background: -moz-linear-gradient(13deg, rgba(14, 9, 121, 1) 0%, rgba(255, 0, 155, 1) 100%);
+    background: -webkit-linear-gradient(13deg, rgba(14, 9, 121, 1) 0%, rgba(255, 0, 155, 1) 100%);
+    background: linear-gradient(13deg, rgba(14, 9, 121, 1) 0%, rgba(255, 0, 155, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#0e0979", endColorstr="#ff009b", GradientType=1);
+    height: 100%;
+    width: 100%;
+    border-radius: 0.25em 0 0 0.25em;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    text-transform: uppercase;
+    color: white;
+    padding: 6em;
+}
+
+.h-550px {
+    height: 550px;
+}
+
+.login-toggle {
+    width: 100%;
+}
+
+.login-toggle ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    position: relative;
+}
+
+.login-toggle li:not(:last-child) {
+    flex: 1;
+    padding: 0.25em 1em;
+    text-transform: uppercase;
+    text-align: center;
+    z-index: 1;
+    color: rgb(14, 9, 121);
+    cursor: pointer;
+}
+
+.animation {
+    width: 0;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #f3f2ff;
+    border-radius: 15px;
+    z-index: 0;
+    transition: all 0.4s;
+}
+
+.login-toggle li:nth-child(1).active~.animation {
+    width: 50%;
+}
+
+.login-toggle li:nth-child(2).active~.animation {
+    width: 50%;
+    left: 50%;
+}
+
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3em;
+}
+
+#login-form.hide {
+    display: none;
+}
+
+#ibu-form.hide {
+    display: none;
+}
+
+.card-body-login {
+    padding: 6rem 2rem;
+}
+
+.btn-posyandu {
+    color: #fff;
+    background-color: rgb(255, 0, 155, 1);
+    border-color: rgb(255, 0, 155, 1);
+}
+
+.btn-posyandu:hover {
+    color: #fff;
+    background-color: rgb(14, 9, 121);
+    border-color: rgb(14, 9, 121);
+    opacity: 0.8;
+}
+
+.btn-posyandu:focus,
+.btn-posyandu.focus {
+    color: #fff;
+    background-color: rgb(255, 0, 155, 1);
+    border-color: rgb(255, 0, 155, 1);
+    box-shadow: 0 0 0 0.2rem rgb(255, 0, 155, 1);
+}
+
+.btn-posyandu.disabled,
+.btn-posyandu:disabled {
+    color: #fff;
+    background-color: rgb(255, 0, 155, 1);
+    border-color: rgb(255, 0, 155, 1);
+    opacity: 0.5;
+}
+
+.btn-posyandu:not(:disabled):not(.disabled):active,
+.btn-posyandu:not(:disabled):not(.disabled).active,
+.show>.btn-posyandu.dropdown-toggle {
+    color: #fff;
+    background-color: rgb(255, 0, 155, 1);
+    border-color: rgb(255, 0, 155, 1);
+}
+
+.btn-posyandu:not(:disabled):not(.disabled):active:focus,
+.btn-posyandu:not(:disabled):not(.disabled).active:focus,
+.show>.btn-posyandu.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgb(255, 0, 155, 1);
+}
+
+.app-container {
+    min-height: 100vh;
+    background-color: white;
+}
+
+.home-container {
+    max-width: 576px;
+    width: 100%;
+    padding-right: 1em;
+    padding-left: 1em;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.card-custom {
+    border-radius: 999px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+nav {
+    position: sticky;
+    top: 1.5rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    position: relative;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+}
+
+nav li {
+    flex: 1;
+    padding: 1.75em 1em;
+    text-transform: uppercase;
+    text-align: center;
+    z-index: 1;
+    color: rgb(14, 9, 121);
+    cursor: pointer;
+}
