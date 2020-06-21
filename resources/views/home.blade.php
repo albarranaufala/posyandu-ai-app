@@ -5,12 +5,13 @@
     <div class="home-container pt-4">
         <nav class="card-custom">
             <ul>
-                <li>Periksa</li>
+                <li class="active">Periksa</li>
                 <li>Data Anak</li>
                 <li>Logout</li>
+                <li class="animation"></li>
             </ul>
         </nav>
-        <div class="py-5 px-3">
+        <div class="px-3 py-5">
             <div class="row">
                 <div class="col-12">
                     <h1>Periksakan anak untuk melihat nilai gizi.</h1>

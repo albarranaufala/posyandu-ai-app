@@ -52,7 +52,7 @@ body {
     cursor: pointer;
 }
 
-.animation {
+.login-toggle .animation {
     width: 0;
     height: 100%;
     position: absolute;
@@ -167,7 +167,7 @@ nav ul {
     flex-wrap: wrap;
 }
 
-nav li {
+nav li:not(:last-child) {
     flex: 1;
     padding: 1.75em 1em;
     text-transform: uppercase;
@@ -175,4 +175,44 @@ nav li {
     z-index: 1;
     color: rgb(14, 9, 121);
     cursor: pointer;
+}
+
+nav .animation {
+    width: 0;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #f3f2ff;
+    border-radius: 9999px;
+    z-index: 0;
+    transition: all 0.4s;
+}
+
+nav li:nth-child(1).active~.animation {
+    width: 33.3333%;
+}
+
+nav li:nth-child(2).active~.animation {
+    width: 33.3333%;
+    left: 33.3333%;
+}
+
+nav li:nth-child(3).active~.animation {
+    width: 33.3333%;
+    left: 66.6666%;
+}
+
+nav li:nth-child(1):hover~.animation {
+    width: 33.3333%;
+}
+
+nav li:nth-child(2):hover~.animation {
+    width: 33.3333%;
+    left: 33.3333%;
+}
+
+nav li:nth-child(3):hover~.animation {
+    width: 33.3333%;
+    left: 66.6666%;
 }
