@@ -73,6 +73,16 @@ body {
     left: 50%;
 }
 
+.login-toggle li:nth-child(1):hover~.animation {
+    left: 0;
+    width: 50%;
+}
+
+.login-toggle li:nth-child(2):hover~.animation {
+    width: 50%;
+    left: 50%;
+}
+
 h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 3em;
@@ -169,12 +179,20 @@ nav ul {
 
 nav li:not(:last-child) {
     flex: 1;
-    padding: 1.75em 1em;
-    text-transform: uppercase;
-    text-align: center;
     z-index: 1;
     color: rgb(14, 9, 121);
     cursor: pointer;
+    padding: 1.75em 1em;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+nav a {
+    color: rgb(14, 9, 121);
+    padding: 1.75em 1em;
+    text-transform: uppercase;
+    text-align: center;
+    width: 100%;
 }
 
 nav .animation {
@@ -204,6 +222,7 @@ nav li:nth-child(3).active~.animation {
 }
 
 nav li:nth-child(1):hover~.animation {
+    left: 0;
     width: 33.3333%;
 }
 
