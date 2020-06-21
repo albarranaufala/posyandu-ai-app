@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Anak extends Model
+class Baby extends Model
 {
     //
 }

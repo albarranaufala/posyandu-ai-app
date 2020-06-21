@@ -29,9 +29,9 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama Posyandu') }}</label>
 
                             <div class="col-md-6">
-                                <input id="nama_posyandu" type="text" class="form-control @error('nama_posyandu') is-invalid @enderror" name="nama_posyandu" required  autocomplete="nama_posyandu" autofocus>
+                                <input id="posyandu" type="text" class="form-control @error('posyandu') is-invalid @enderror" name="posyandu" required  autocomplete="posyandu" autofocus>
 
-                                @error('nama_posyandu')
+                                @error('posyandu')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
