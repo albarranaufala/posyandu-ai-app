@@ -3,11 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Baby;
 
 class BabyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(){
         return view('babies.index');
+    }
+
+    public function getAllBabies(){
+        $babies = Baby::all();
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'babies' => $babies
+            ]
+        ]);
     }
 
     public function store(Request $request){
@@ -16,7 +33,7 @@ class BabyController extends Controller
         $uniqueCode = '';
         for($i=0; $i<10; $i++){
             $angka = rand(0, 25);
-            $uniqueCode += $huruf[$angka];
+            $uniqueCode = $uniqueCode.$huruf[$angka];
         }
 
         $this->validate($request,[
@@ -37,5 +54,13 @@ class BabyController extends Controller
             'contact' => $request->kontak,
             'unique_code' => $uniqueCode
         ]);
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'babies' => Baby::all()
+            ]
+        ]);
     }
+    
 }

@@ -8,7 +8,8 @@
                 <div id="add-baby-button" class="card-body">
                     Tambah Anak
                 </div>
-                <div id="add-baby-form" class="card-body hide">
+                <form id="add-baby-form" class="card-body hide">
+                    @csrf
                     <div class="form-group">
                         <label for="nama_anak">Nama Anak</label>
                         <input id="nama_anak" type="text" class="form-control @error('nama_anak') is-invalid @enderror" name="nama_anak" value="{{ old('nama_anak') }}" required autocomplete="nama_anak" placeholder="Masukkan nama anak">
@@ -74,68 +75,20 @@
                         @enderror
                     </div>
                     <div class="form-group text-right">
-                        <button class="btn btn-light" id="cancel-add-button">Batal</button>
-                        <button class="btn btn-posyandu px-5">Daftarkan Anak</button>
+                        <button class="btn btn-light" id="cancel-add-button" type="button">Batal</button>
+                        <button class="btn btn-posyandu px-5" type="submit">Daftarkan Anak</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
     <div class="row mt-5">
         <div class="col-12">
-            <div class="card-add-baby mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center">
-                            <span><strong>Albarra Naufala Erdanto</strong></span>
-                            <span class="color-red"><small>ASDNFLASDLK</small></span>
-                        </div>
-                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center color-grey">
-                            <span>12/12/2019</span>
-                            <span><small>Laki-laki</small></span>
-                        </div>
-                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center color-grey">
-                            <span>Erni Catur</span>
-                            <span><small>08123123123</small></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-add-baby mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center">
-                            <span><strong>Fakhri Pradana</strong></span>
-                            <span class="color-red"><small>ASDNFLASDLK</small></span>
-                        </div>
-                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center color-grey">
-                            <span>12/12/2019</span>
-                            <span><small>Laki-laki</small></span>
-                        </div>
-                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center color-grey">
-                            <span>Erni Catur</span>
-                            <span><small>08123123123</small></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-add-baby mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center">
-                            <span><strong>Salsabila Zahirah Ramania Musdalifah</strong></span>
-                            <span class="color-red"><small>ASDNFLASDLK</small></span>
-                        </div>
-                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center color-grey">
-                            <span>12/12/2019</span>
-                            <span><small>Laki-laki</small></span>
-                        </div>
-                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center color-grey">
-                            <span>Erni Catur</span>
-                            <span><small>08123123123</small></span>
-                        </div>
-                    </div>
-                </div>
+            <h3 class="text-center"><strong>Data Anak</strong></h3>
+        </div>
+        <div class="col-12" id="babies-container">
+            <div style="height:250px" class="d-flex justify-content-center align-items-center">
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
             </div>
         </div>
     </div>

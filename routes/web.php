@@ -28,3 +28,5 @@ Route::get('/home/checks', 'CheckController@index')->name('checks');
 Route::post('/home/checks', 'CheckController@store')->name('checks.store');
 
 Route::get('/home/babies', 'BabyController@index')->name('babies');
+Route::get('/babies', 'BabyController@getAllBabies');
+Route::post('/babies', 'BabyController@store');

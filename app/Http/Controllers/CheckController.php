@@ -778,7 +778,6 @@ class CheckController extends Controller
                 $hitung = (5*$minimum)+48;
                 array_push($z, $hitung);
             }
-
             $size = count($alpha);
             $total =0;
             $pembagi =0;
