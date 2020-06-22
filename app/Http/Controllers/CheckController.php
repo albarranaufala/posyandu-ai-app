@@ -426,6 +426,13 @@ class CheckController extends Controller
             $nilaiGizi = $total/$pembagi;
         }    
 
+        Check::create([
+            'body_weight'=> $request->berat_badan,
+            'body_height'=> $request->tinggi_badan,
+            'nutritional_value' => $nilaiGizi,
+            'baby_id'=> $request->nama_anak,
+            'user_id'=> auth()->id
+        ]);
 
     }
 
