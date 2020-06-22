@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Check;
 use App\Baby;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class CheckController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -45,12 +52,13 @@ class CheckController extends Controller
         
         $id = $request->nama_anak;
         $baby = Baby::find($id);
-        $baby->gender;
-        $umur = Carbon::parse($baby->umur)->age;
+        $tanggalLahir = Carbon::createFromFormat('Y-m-d', $baby->baby_birthday);
+        $tanggalSekarang = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->toDateTimeString());
+        $umur = $tanggalSekarang->diffInMonths($tanggalLahir);
         $beratBadan = $request->berat_badan;
         $tinggiBadan = $request->tinggi_badan;
 
-        if($baby == 'laki-laki'){
+        if($baby->gender == 'L'){
             if($umur <= 6){
                 $miu_umur_fase1 = 1;
             } else if($umur > 6 and $umur <=12){
@@ -419,21 +427,29 @@ class CheckController extends Controller
             $total =0;
             $pembagi =0;
             for($i=0; $i<$size; $i++){
-                $total += $alpha[i]*$z[i];
-                $pembagi += $alpha[i];
+                $total += $alpha[$i]*$z[$i];
+                $pembagi += $alpha[$i];
             }
 
             $nilaiGizi = $total/$pembagi;
         }    
-
-        Check::create([
-            'body_weight'=> $request->berat_badan,
-            'body_height'=> $request->tinggi_badan,
-            'nutritional_value' => $nilaiGizi,
-            'baby_id'=> $request->nama_anak,
-            'user_id'=> auth()->id
+        
+        $check = new Check();
+        $check->body_weight = $request->berat_badan;
+        $check->body_height = $request->tinggi_badan;
+        $check->nutritional_value = $nilaiGizi;
+        $check->baby_id = $baby->id;
+        $check->user_id = Auth::user()->id;
+        $check->save();
+        
+        $check = Check::with('baby')->find($check->id);
+        
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'checkResult' => $check
+            ]
         ]);
-
     }
 
     /**
