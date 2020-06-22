@@ -1,11 +1,11 @@
 @extends('layouts.home')
 
 @section('home-content')
-<div class="px-3 py-5">
+<div class="p-3">
     <div class="row">
         <div class="col-12">
-            <h1>Periksakan anak untuk melihat nilai gizi.</h1>
-            <div class="check-container">
+            <div id="check-form-container">
+                <h1>Periksakan anak untuk melihat nilai gizi.</h1>
                 <form id="check-form">
                     @csrf
                     <div class="form-group mt-3">
@@ -47,6 +47,8 @@
                         <button class="btn btn-posyandu px-5" type="submit">Periksa</button>
                     </div>
                 </form>
+            </div>
+            <div id="check-container">
             </div>
         </div>
     </div>

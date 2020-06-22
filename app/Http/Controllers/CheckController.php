@@ -789,6 +789,7 @@ class CheckController extends Controller
 
             $nilaiGizi = $total/$pembagi;
         }
+
         $check = new Check();
         $check->body_weight = $request->berat_badan;
         $check->body_height = $request->tinggi_badan;
@@ -798,11 +799,13 @@ class CheckController extends Controller
         $check->save();
         
         $check = Check::with('baby')->find($check->id);
-        
         return response()->json([
             'status' => 200,
             'data' => [
-                'checkResult' => $check
+                'checkResult' => $check,
+                'bodyWeight' => $beratBadan,
+                'bodyHeight' => $tinggiBadan,
+                'ageMonth' => $umur,
             ]
         ]);
     }
