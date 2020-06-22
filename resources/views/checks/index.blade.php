@@ -9,7 +9,10 @@
                 <div class="form-group mt-3">
                     <label for="nama_anak">Cari nama anak yang ingin diperiksa</label>
                     <select id="nama_anak" type="text" class="form-control @error('nama_anak') is-invalid @enderror" name="nama_anak" value="{{ old('nama_anak') }}" required autocomplete="nama_anak">
-                        <option value="">Cari nama anak</option>
+                        <option value="" selected disabled>Cari nama anak</option>
+                        @foreach ($babies as $baby)
+                        <option value="">{{$baby->baby_name}}</option>
+                        @endforeach
                     </select>
 
                     @error('nama_anak')

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Check;
+use App\Baby;
 use Illuminate\Http\Request;
 
 class CheckController extends Controller
@@ -14,7 +15,8 @@ class CheckController extends Controller
      */
     public function index()
     {
-        return view('checks.index');
+        $babies = Baby::all();
+        return view('checks.index', compact('babies'));
     }
 
     /**

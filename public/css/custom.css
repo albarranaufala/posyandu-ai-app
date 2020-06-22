@@ -157,7 +157,7 @@ h1 {
     margin-left: auto;
 }
 
-.card-custom {
+.card-nav {
     border-radius: 999px;
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.125);
@@ -166,6 +166,7 @@ h1 {
 nav {
     position: sticky;
     top: 1.5rem;
+    z-index: 1;
 }
 
 nav ul {
@@ -185,14 +186,6 @@ nav li:not(:last-child) {
     padding: 1.75em 1em;
     text-transform: uppercase;
     text-align: center;
-}
-
-nav a {
-    color: rgb(14, 9, 121);
-    padding: 1.75em 1em;
-    text-transform: uppercase;
-    text-align: center;
-    width: 100%;
 }
 
 nav .animation {
@@ -234,4 +227,27 @@ nav li:nth-child(2):hover~.animation {
 nav li:nth-child(3):hover~.animation {
     width: 33.3333%;
     left: 66.6666%;
+}
+
+.card-add-baby {
+    border-radius: 30px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    cursor: pointer;
+}
+
+#add-baby-button.hide {
+    display: none;
+}
+
+#add-baby-form.hide {
+    display: none;
+}
+
+.color-red {
+    color: rgb(255, 0, 155, 1);
+}
+
+.color-grey {
+    color: grey;
 }
