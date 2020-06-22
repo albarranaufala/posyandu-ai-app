@@ -76,7 +76,7 @@ class CheckController extends Controller
             $miu_umur_fase5 = 1;
         }
 
-        if($baby == 'L'){
+        if($baby->gender == 'L'){
             if($beratBadan > 0 and $beratBadan <=7){
                 $miu_bb_ringan = 1;
             } else if($beratBadan > 7 and $beratBadan <=13){
@@ -430,10 +430,9 @@ class CheckController extends Controller
                 $total += $alpha[$i]*$z[$i];
                 $pembagi += $alpha[$i];
             }
-
             $nilaiGizi = $total/$pembagi;
         }    
-        else if($baby == 'P'){
+        else if($baby->gender == 'P'){
             if($beratBadan > 0 and $beratBadan <=7){
                 $miu_bb_ringan = 1;
             } else if($beratBadan > 7 and $beratBadan <=12){
@@ -784,13 +783,12 @@ class CheckController extends Controller
             $total =0;
             $pembagi =0;
             for($i=0; $i<$size; $i++){
-                $total += $alpha[i]*$z[i];
-                $pembagi += $alpha[i];
+                $total += $alpha[$i]*$z[$i];
+                $pembagi += $alpha[$i];
             }
 
             $nilaiGizi = $total/$pembagi;
         }
-        
         $check = new Check();
         $check->body_weight = $request->berat_badan;
         $check->body_height = $request->tinggi_badan;

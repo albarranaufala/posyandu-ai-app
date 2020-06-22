@@ -141,3 +141,7 @@
     </div>
 </div>
 @endsection
+
+@section('scripts-home')
+    <script defer src="{{asset('js/babies.js')}}"></script>
+@endsection

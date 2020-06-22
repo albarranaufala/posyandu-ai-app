@@ -17,5 +17,6 @@
 @endsection
 
 @section('scripts')
-    <script defer src="{{asset('js/home.js')}}"></script>
+    <script defer src="{{asset('js/nav.js')}}"></script>
+    @yield('scripts-home')
 @endsection
