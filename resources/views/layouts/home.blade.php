@@ -3,11 +3,11 @@
 @section('content')
 <div class="app-container">
     <div class="home-container pt-4">
-        <nav class="card-custom">
+        <nav class="card-nav">
             <ul>
-                <li class="@if(Route::currentRouteName() == 'checks') active @endif"><a href="/home/checks" class="text-decoration-none">Periksa</a></li>
-                <li class="@if(Route::currentRouteName() == 'babies') active @endif"><a href="/home/babies" class="text-decoration-none">Data Anak</a></li>
-                <li><a href="{{ url('/logout') }}" class="text-decoration-none">Logout</a></li>
+                <li id="to-checks-button" class="@if(Route::currentRouteName() == 'checks') active @endif">Periksa</li>
+                <li id="to-babies-button" class="@if(Route::currentRouteName() == 'babies') active @endif">Data Anak</li>
+                <li id="to-logout-button">Logout</li>
                 <li class="animation"></li>
             </ul>
         </nav>
