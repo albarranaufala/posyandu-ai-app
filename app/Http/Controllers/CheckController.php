@@ -58,46 +58,57 @@ class CheckController extends Controller
         $beratBadan = $request->berat_badan;
         $tinggiBadan = $request->tinggi_badan;
 
-        if($umur <= 6){
+        if($umur >=0 and $umur <=6){
             $miu_umur_fase1 = 1;
-        } else if($umur > 6 and $umur <=12){
+        }
+        if($umur >= 6 and $umur <=12){
             $miu_umur_fase1 = (12-$umur)/6;
             $miu_umur_fase2 = ($umur-6)/6;
-        } else if($umur > 12 and $umur <= 24){
+        }
+        if($umur >= 12 and $umur <= 24){
             $miu_umur_fase2 = (24-$umur)/12;
             $miu_umur_fase3 = ($umur-12)/12;
-        } else if($umur > 24 and $umur <= 36){
+        }
+        if($umur >= 24 and $umur <= 36){
             $miu_umur_fase3 = (36-$umur)/12;
             $miu_umur_fase4 = ($umur-24)/12;
-        } else if($umur > 38 and $umur <= 48){
+        }
+        if($umur >= 38 and $umur <= 48){
             $miu_umur_fase4 = (48-$umur)/12;
             $miu_umur_fase5 = ($umur-36)/12;
-        } else if($umur > 48){
+        }
+        if($umur >= 48){
             $miu_umur_fase5 = 1;
         }
 
         if($baby->gender == 'L'){
-            if($beratBadan > 0 and $beratBadan <=7){
+            if($beratBadan >= 0 and $beratBadan <=7){
                 $miu_bb_ringan = 1;
-            } else if($beratBadan > 7 and $beratBadan <=13){
+            }
+            if($beratBadan >= 7 and $beratBadan <=13){
                 $miu_bb_ringan = (13-$beratBadan)/6;
                 $miu_bb_sedang = ($beratBadan-7)/6;
-            } else if($beratBadan > 13 and $beratBadan <= 19){
+            }
+            if($beratBadan >= 13 and $beratBadan <= 19){
                 $miu_bb_sedang = (19-$beratBadan)/6;
                 $miu_bb_berat = ($beratBadan-13)/6;
-            } else if($beratBadan > 19){
+            }
+            if($beratBadan >= 19){
                 $miu_bb_berat = 1;
             }
 
-            if($tinggiBadan > 0 and $tinggiBadan <=49){
+            if($tinggiBadan >= 0 and $tinggiBadan <=49){
                 $miu_tb_rendah = 1;
-            } else if($tinggiBadan >49 and $tinggiBadan <=75){
+            }
+            if($tinggiBadan >=49 and $tinggiBadan <=75){
                 $miu_tb_rendah = (75-$tinggiBadan)/26;
                 $miu_tb_sedang = ($tinggiBadan-49)/26;
-            } else if($tinggiBadan >75 and $tinggiBadan <=101){
+            }
+            if($tinggiBadan >=75 and $tinggiBadan <=101){
                 $miu_tb_sedang = (101-$tinggiBadan)/26;
                 $miu_tb_tinggi = ($tinggiBadan-75)/26;
-            } else if($tinggiBadan > 101){
+            }
+            if($tinggiBadan >= 101){
                 $miu_tb_tinggi = 1;
             }
 
@@ -118,7 +129,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75)){
                 $minimum = min($miu_umur_fase1, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (6*$minimum)+43;
@@ -139,28 +150,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75)){
                 $minimum = min($miu_umur_fase1, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
                 $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 13) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
                 $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 13) and ($tinggiBadan >= 75)){
                 $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (12*$minimum)+70;
@@ -182,7 +193,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75 )){
                 $minimum = min($miu_umur_fase2, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (6*$minimum)+43;
@@ -203,28 +214,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 )){
                 $minimum = min($miu_umur_fase2, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
                 $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 13) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
                 $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 13) and ($tinggiBadan >= 75 )){
                 $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (12*$minimum)+70;
@@ -246,7 +257,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75)){
                 $minimum = min($miu_umur_fase3, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = 49-(6*$minimum);
@@ -267,28 +278,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75)){
                 $minimum = min($miu_umur_fase3, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
                 $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 13 ) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
                 $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
             
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 13 ) and ($tinggiBadan >= 75)){
                 $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (12*$minimum)+70;
@@ -310,7 +321,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75)){
                 $minimum = min($miu_umur_fase4, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (6*$minimum)+43;
@@ -331,28 +342,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 )){
                 $minimum = min($miu_umur_fase4, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
                 $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
                 $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 75 )){
                 $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
@@ -374,7 +385,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75)){
                 $minimum = min($miu_umur_fase5, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = 49-(6*$minimum);
@@ -395,28 +406,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 )){
                 $minimum = min($miu_umur_fase5, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (6*$minimum)+43;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
                 $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
                 $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 13 and $beratBadan <=19) and ($tinggiBadan >= 75 and $tinggiBadan <=101)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 75 )){
                 $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
@@ -435,25 +446,31 @@ class CheckController extends Controller
         else if($baby->gender == 'P'){
             if($beratBadan > 0 and $beratBadan <=7){
                 $miu_bb_ringan = 1;
-            } else if($beratBadan > 7 and $beratBadan <=12){
+            }
+            if($beratBadan > 7 and $beratBadan <=12){
                 $miu_bb_ringan = (12-$beratBadan)/5;
                 $miu_bb_sedang = ($beratBadan-7)/5;
-            } else if($beratBadan > 12 and $beratBadan <= 18){
+            }
+            if($beratBadan > 12 and $beratBadan <= 18){
                 $miu_bb_sedang = (18-$beratBadan)/6;
                 $miu_bb_berat = ($beratBadan-12)/6;
-            } else if($beratBadan > 18){
+            }
+            if($beratBadan > 18){
                 $miu_bb_berat = 1;
             }
 
             if($tinggiBadan > 0 and $tinggiBadan <=48){
                 $miu_tb_rendah = 1;
-            } else if($tinggiBadan >48 and $tinggiBadan <=74){
+            }
+            if($tinggiBadan >48 and $tinggiBadan <=74){
                 $miu_tb_rendah = (75-$tinggiBadan)/26;
                 $miu_tb_sedang = ($tinggiBadan-49)/26;
-            } else if($tinggiBadan >74 and $tinggiBadan <=100){
+            }
+            if($tinggiBadan >74 and $tinggiBadan <=100){
                 $miu_tb_sedang = (101-$tinggiBadan)/26;
                 $miu_tb_tinggi = ($tinggiBadan-75)/26;
-            } else if($tinggiBadan > 100){
+            }
+            if($tinggiBadan > 100){
                 $miu_tb_tinggi = 1;
             }
 
@@ -474,7 +491,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74)){
                 $minimum = min($miu_umur_fase1, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (6*$minimum)+43;
@@ -495,28 +512,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74)){
                 $minimum = min($miu_umur_fase1, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 12) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
                 $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 12) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
                 $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 12) and ($tinggiBadan >= 74)){
                 $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (12*$minimum)+70;
@@ -538,7 +555,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74)){
                 $minimum = min($miu_umur_fase2, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (6*$minimum)+43;
@@ -559,28 +576,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 )){
                 $minimum = min($miu_umur_fase2, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 12 ) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
                 $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 12 ) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
                 $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 12 ) and ($tinggiBadan >= 74 )){
                 $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (12*$minimum)+70;
@@ -602,7 +619,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74 )){
                 $minimum = min($miu_umur_fase3, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = 49-(6*$minimum);
@@ -623,28 +640,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 )){
                 $minimum = min($miu_umur_fase3, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 12 ) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
                 $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 12) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
                 $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
             
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 12) and ($tinggiBadan >= 74)){
                 $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (12*$minimum)+70;
@@ -666,7 +683,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74 )){
                 $minimum = min($miu_umur_fase4, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (6*$minimum)+43;
@@ -687,28 +704,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 )){
                 $minimum = min($miu_umur_fase4, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
                 $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
                 $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 74 )){
                 $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
@@ -730,7 +747,7 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             } 
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74)){
                 $minimum = min($miu_umur_fase5, $miu_bb_ringan, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = 49-(6*$minimum);
@@ -751,28 +768,28 @@ class CheckController extends Controller
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 )){
                 $minimum = min($miu_umur_fase5, $miu_bb_sedang, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (6*$minimum)+43;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
                 $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_rendah);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
                 $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_sedang);
                 array_push($alpha, $minimum);
                 $hitung = (29*$minimum)+53;
                 array_push($z, $hitung);
             }
 
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 12 and $beratBadan <=18) and ($tinggiBadan >= 74 and $tinggiBadan <=100)){
+            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 74)){
                 $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_tinggi);
                 array_push($alpha, $minimum);
                 $hitung = (5*$minimum)+48;
