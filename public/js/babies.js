@@ -103,6 +103,7 @@ function toDetail(babyId) {
     const baby = babies.find(baby => baby.id == babyId);
     pageBabies.classList.add('d-none');
     pageDetailBaby.innerHTML = renderDetailBaby(baby);
+    renderChart(baby.checks);
 }
 
 function backToBabies(e) {
@@ -112,6 +113,9 @@ function backToBabies(e) {
 }
 
 function renderBabyChecks(checks) {
+    if (checks.length == 0) {
+        return `<tr><td colspan='6'>Belum melakukan pemeriksaan</td></tr>`;
+    }
     return checks.map((check, index) => renderBabyCheck(check, index))
         .reduce((finalRender, renderBabyCheck) => finalRender + renderBabyCheck);
 }
@@ -197,5 +201,34 @@ function renderDetailBaby(baby) {
                 </table>
             </div>
         </div>
+        <div id="chartContainer" class="mt-3"></div>
         `;
+}
+
+function renderChart(checks) {
+    if (checks.length) {
+        document.getElementById('chartContainer').style.height = '300px'
+        document.getElementById('chartContainer').style.width = '100%'
+        let nutritionalValueDatas = checks.map(check => {
+            return {
+                y: check.nutritional_value
+            }
+        })
+        let chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+                text: "Grafik Nilai Gizi"
+            },
+            axisY: {
+                includeZero: false
+            },
+            data: [{
+                type: "line",
+                indexLabelFontSize: 16,
+                dataPoints: nutritionalValueDatas
+            }]
+        });
+        chart.render();
+    }
 }

@@ -54,11 +54,11 @@ class BabyController extends Controller
             'contact' => $request->kontak,
             'unique_code' => $uniqueCode
         ]);
-
+        $babies = Baby::with('checks')->orderBy('created_at', 'desc')->get();
         return response()->json([
             'status' => 200,
             'data' => [
-                'babies' => Baby::all()
+                'babies' => $babies
             ]
         ]);
     }
