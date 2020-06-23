@@ -50,7 +50,7 @@ checkForm.addEventListener('submit', async function(e) {
             <div class="row">
                 <div class="col-12 text-center">
                     <div class="nilai-gizi">${checkResult.nutritional_value.toFixed(2)}</div>
-                    <div class="nilai-gizi-label">Normal</div>
+                    <div class="nilai-gizi-label">${checkResult.nutritional_status}</div>
                 </div>
             </div>
             <div class="row my-3 text-center">

@@ -807,15 +807,15 @@ class CheckController extends Controller
         }
 
         if($nilaiGizi > 0){
-            if($nilaiGizi < 44 ){
+            if($nilaiGizi < 45.5 ){
                 $statusGizi = 'Gizi Buruk';
-            } else if($nilaiGizi < 49){
+            } else if($nilaiGizi < 50.5){
                 $statusGizi = 'Gizi Kurang';
-            } else if ($nilaiGizi < 54){
+            } else if ($nilaiGizi < 61.5){
                 $statusGizi = 'Gizi Normal';
-            } else if($nilaiGizi <71){
+            } else if($nilaiGizi <76.5){
                 $statusGizi = 'Gizi Lebih';
-            } else if($nilaiGizi >= 71){
+            } else{
                 $statusGizi = 'Obesitas';
             }
         }

@@ -201,6 +201,7 @@ function renderDetailBaby(baby) {
                 </table>
             </div>
         </div>
+        <h3 class="my-3"><strong>Grafik Nilai Gizi</strong></h3>
         <div id="chartContainer" class="mt-3"></div>
         `;
 }
@@ -217,9 +218,6 @@ function renderChart(checks) {
         let chart = new CanvasJS.Chart("chartContainer", {
             animationEnabled: true,
             theme: "light2",
-            title: {
-                text: "Grafik Nilai Gizi"
-            },
             axisY: {
                 includeZero: false
             },

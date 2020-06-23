@@ -65,8 +65,8 @@ function renderSearchResult(baby) {
                     <div class="card-body">
                         <div aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#" onclick="backToLogin(event)">Login</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Detail Anak</li>
+                                <li class="breadcrumb-item"><a href="#" onclick="backToLogin(event)">Login</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Detail Anak</li>
                             </ol>
                         </div>
                         <div class="alert alert-primary" role="alert">
@@ -127,6 +127,7 @@ function renderSearchResult(baby) {
                                 </table>
                             </div>
                         </div>
+                        <h3 class="my-3"><strong>Grafik Nilai Gizi</strong></h3>
                         <div id="chartContainer" class="mt-3"></div>
                     </div>
                 </div>
@@ -169,9 +170,6 @@ function renderChart(checks) {
         let chart = new CanvasJS.Chart("chartContainer", {
             animationEnabled: true,
             theme: "light2",
-            title: {
-                text: "Grafik Nilai Gizi"
-            },
             axisY: {
                 includeZero: false
             },
