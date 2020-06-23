@@ -77,8 +77,11 @@ class CheckController extends Controller
             $miu_umur_fase4 = (48-$umur)/12;
             $miu_umur_fase5 = ($umur-36)/12;
         }
-        if($umur >= 48){
+        if($umur >= 48 and $umur <=60){
             $miu_umur_fase5 = 1;
+        }
+        if($umur > 60){
+            $peringatan = 'umur balita tidak boleh lebih dari 60 bulan';
         }
 
         if($baby->gender == 'L'){
@@ -838,6 +841,7 @@ class CheckController extends Controller
                 'bodyWeight' => $beratBadan,
                 'bodyHeight' => $tinggiBadan,
                 'ageMonth' => $umur,
+                'errorMessage' => $peringatan,
             ]
         ]);
     }
