@@ -806,11 +806,25 @@ class CheckController extends Controller
             $nilaiGizi = $total/$pembagi;
         }
 
+        if($nilaiGizi > 0){
+            if($nilaiGizi < 44 ){
+                $statusGizi = 'Gizi Buruk';
+            } else if($nilaiGizi < 49){
+                $statusGizi = 'Gizi Kurang';
+            } else if ($nilaiGizi < 54){
+                $statusGizi = 'Gizi Normal';
+            } else if($nilaiGizi <71){
+                $statusGizi = 'Gizi Lebih';
+            } else if($nilaiGizi >= 71){
+                $statusGizi = 'Obesitas';
+            }
+        }
+
         $check = new Check();
         $check->body_weight = $request->berat_badan;
         $check->body_height = $request->tinggi_badan;
         $check->nutritional_value = $nilaiGizi;
-        $check->nutritional_status = 'Normal'; //Sementara
+        $check->nutritional_status = $statusGizi;
         $check->age = $umur;
         $check->baby_id = $baby->id;
         $check->user_id = Auth::user()->id;
