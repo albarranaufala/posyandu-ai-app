@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="login-container d-flex justify-content-center flex-column overflow-hidden">
-    <div class="row h-550px">
+    <div id="login-container" class="row h-550px">
         <div class="col-lg-9 mx-auto h-100">
             <div class="card shadow h-100">
                 <div class="row h-100">
@@ -74,8 +74,8 @@
                                         @endif --}}
                                     </div>
                                 </form>
-                                <form id="ibu-form" class="hide w-100" action="">
-                                    <div class="form-group ">
+                                <form id="ibu-form" class="hide w-100">
+                                    <div class="form-group">
                                         <label for="Kode Anak">{{ __('Kode Anak') }}</label>
                                         <input id="kode_anak" type="text" class="form-control @error('kode_anak') is-invalid @enderror" name="kode_anak" value="{{ old('kode_anak') }}" required autocomplete="kode_anak">
                     
@@ -98,9 +98,13 @@
             </div>
         </div>
     </div>
+    <div id="search-result-container" class="row">
+        
+    </div>
 </div>
 @endsection
 
 @section('scripts')
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script defer src="{{asset('js/login.js')}}"></script>
 @endsection

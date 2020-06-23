@@ -70,7 +70,7 @@ checkForm.addEventListener('submit', async function(e) {
 
             <div class="alert alert-primary" role="alert">
                 <div class="row text-md-center">
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-3">
                         <div class="form-group">
                             <div>Nama Anak</div>
                             <div><strong>${checkResult.baby.baby_name}</strong></div>

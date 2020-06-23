@@ -21,6 +21,7 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout');
+Route::get('/search/{code}', 'BabySearchController@search');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
