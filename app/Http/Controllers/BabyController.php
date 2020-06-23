@@ -17,7 +17,7 @@ class BabyController extends Controller
     }
 
     public function getAllBabies(){
-        $babies = Baby::all();
+        $babies = Baby::with('checks')->orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'status' => 200,

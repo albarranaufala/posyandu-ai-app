@@ -14,7 +14,8 @@ class AddNutritionalStatusToChecksTable extends Migration
     public function up()
     {
         Schema::table('checks', function (Blueprint $table) {
-            $table->string('nutritional_status');
+            $table->string('nutritional_status')->after('nutritional_value');
+            $table->integer('age')->after('nutritional_status');
         });
     }
 
@@ -27,6 +28,7 @@ class AddNutritionalStatusToChecksTable extends Migration
     {
         Schema::table('checks', function (Blueprint $table) {
             $table->dropColumn('nutritional_status');
+            $table->dropColumn('age');
         });
     }
 }

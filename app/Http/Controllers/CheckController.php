@@ -793,6 +793,8 @@ class CheckController extends Controller
         $check->body_weight = $request->berat_badan;
         $check->body_height = $request->tinggi_badan;
         $check->nutritional_value = $nilaiGizi;
+        $check->nutritional_status = 'Normal'; //Sementara
+        $check->age = $umur;
         $check->baby_id = $baby->id;
         $check->user_id = Auth::user()->id;
         $check->save();

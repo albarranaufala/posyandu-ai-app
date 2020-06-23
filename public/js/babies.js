@@ -3,6 +3,10 @@ const addBabyForm = document.getElementById('add-baby-form');
 const addBabyCard = document.querySelector('.card-add-baby');
 const cancelAddButton = document.getElementById('cancel-add-button');
 const babiesContainer = document.getElementById('babies-container');
+const babySearch = document.getElementById('baby-search');
+const pageDetailBaby = document.getElementById('page-detail-baby');
+const pageBabies = document.getElementById('page-babies');
+let babies;
 
 addBabyButton.addEventListener('click', function() {
     addBabyButton.classList.toggle('hide');
@@ -29,7 +33,8 @@ addBabyForm.addEventListener('submit', async function(e) {
         })
         .then(function(json) {
             data = json.data;
-            renderBabies(data.babies)
+            babies = data.babies;
+            renderBabies(data.babies);
         })
         .catch(function(error) {
             console.error(error);
@@ -46,21 +51,25 @@ fetch('/babies')
     })
     .then(function(json) {
         data = json.data;
+        babies = data.babies;
         renderBabies(data.babies);
-        // console.log(data.babies);
     })
     .catch(function(error) {
         console.error(error);
     });
 
 function renderBabies(babies) {
-    babiesContainer.innerHTML = babies.map(baby => renderBaby(baby))
-        .reduce((result, renderBaby) => result + renderBaby)
+    if (babies.length) {
+        babiesContainer.innerHTML = babies.map(baby => renderBaby(baby))
+            .reduce((result, renderBaby) => result + renderBaby);
+    } else {
+        babiesContainer.innerHTML = 'Tidak ada anak';
+    }
 }
 
 function renderBaby(baby) {
     return `
-        <div class="card-add-baby mb-3">
+        <div class="card-add-baby mb-3" onclick="toDetail(${baby.id})">
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-4 d-flex flex-column align-items-center justify-content-center text-center">
@@ -79,4 +88,114 @@ function renderBaby(baby) {
             </div>
         </div>
     `
+}
+
+babySearch.addEventListener('input', function(e) {
+    const searchResult = babies.filter(baby => {
+        const nameCode = baby.unique_code + baby.baby_name;
+        return nameCode.toLowerCase().match(babySearch.value.toLowerCase())
+    });
+
+    renderBabies(searchResult);
+})
+
+function toDetail(babyId) {
+    const baby = babies.find(baby => baby.id == babyId);
+    pageBabies.classList.add('d-none');
+    pageDetailBaby.innerHTML = renderDetailBaby(baby);
+}
+
+function backToBabies(e) {
+    e.preventDefault();
+    pageBabies.classList.remove('d-none');
+    pageDetailBaby.innerHTML = '';
+}
+
+function renderBabyChecks(checks) {
+    return checks.map((check, index) => renderBabyCheck(check, index))
+        .reduce((finalRender, renderBabyCheck) => finalRender + renderBabyCheck);
+}
+
+function renderBabyCheck(check, order) {
+    const date = new Date(check.created_at);
+    const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: '2-digit' })
+    const [{ value: month }, , { value: day }, , { value: year }] = dateTimeFormat.formatToParts(date)
+
+    return `<tr>
+                <th scope="row">${order+1}</th>
+                <td>${check.body_weight}</td>
+                <td>${check.body_height}</td>
+                <td>${check.age}</td>
+                <td>${day} ${month} ${year }</td>
+                <td>${check.nutritional_value.toFixed(2)}</td>
+            </tr>`;
+}
+
+function renderDetailBaby(baby) {
+    return `
+        <div aria-label="breadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#" onclick="backToBabies(event)">Daftar Anak</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detail Anak</li>
+            </ol>
+        </div>
+        <div class="alert alert-primary" role="alert">
+            <div class="row text-md-center">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div>Nama Anak</div>
+                        <div><strong>${baby.baby_name}</strong></div>
+                    </div>
+                    <div class="form-group">
+                        <div>Tanggal Lahir</div>
+                        <div><strong>${baby.baby_birthday}</strong></div>
+                    </div>
+                    <div class="form-group mb-0">
+                        <div>Nama Ibu</div>
+                        <div><strong>${baby.mother_name}</strong></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div>Jenis Kelamin</div>
+                        <div><strong>${baby.gender}</strong></div>
+                    </div>
+                    <div class="form-group">
+                        <div>Kode Anak</div>
+                        <div><strong>${baby.unique_code}</strong></div>
+                    </div>
+                    <div class="form-group mb-0">
+                        <div>Kontak</div>
+                        <div><strong>${baby.contact}</strong></div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group mb-0">
+                        <div>Alamat</div>
+                        <div><strong>${baby.address}</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h3 class="mb-3"><strong>Pemeriksaan Anak</strong></h3>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Berat Badan</th>
+                            <th scope="col">Tinggi Badan</th>
+                            <th scope="col">Umur</th>
+                            <th scope="col">Tanggal Periksa</th>
+                            <th scope="col">Nilai Gizi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${renderBabyChecks(baby.checks)}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        `;
 }
