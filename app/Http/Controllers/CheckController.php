@@ -57,6 +57,7 @@ class CheckController extends Controller
         $umur = $tanggalSekarang->diffInMonths($tanggalLahir);
         $beratBadan = $request->berat_badan;
         $tinggiBadan = $request->tinggi_badan;
+        $peringatan = '';
 
         if($umur >=0 and $umur <=6){
             $miu_umur_fase1 = 1;
@@ -82,6 +83,12 @@ class CheckController extends Controller
         }
         if($umur > 60){
             $peringatan = 'umur balita tidak boleh lebih dari 60 bulan';
+            return response()->json([
+                'status' => 200,
+                'data' => [
+                    'errorMessage' => $peringatan,
+                ]
+            ]);
         }
 
         if($baby->gender == 'L'){
