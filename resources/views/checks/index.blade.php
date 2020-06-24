@@ -25,7 +25,7 @@
                     </div>
                     <div class="form-group">
                         <label for="berat_badan">Berat badan balita (kg)</label>
-                        <input id="berat_badan" type="text" class="form-control @error('berat_badan') is-invalid @enderror" name="berat_badan" value="{{ old('berat_badan') }}" required autocomplete="berat_badan" placeholder="Masukkan berat badan">
+                        <input id="berat_badan" type="number" class="form-control @error('berat_badan') is-invalid @enderror" name="berat_badan" value="{{ old('berat_badan') }}" required autocomplete="berat_badan" placeholder="Masukkan berat badan">
     
                         @error('berat_badan')
                             <span class="invalid-feedback" role="alert">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="form-group">
                         <label for="tinggi_badan">Tinggi badan balita (cm)</label>
-                        <input id="tinggi_badan" type="text" class="form-control @error('tinggi_badan') is-invalid @enderror" name="tinggi_badan" value="{{ old('tinggi_badan') }}" required autocomplete="tinggi_badan" placeholder="Masukkan tinggi badan">
+                        <input id="tinggi_badan" type="number" class="form-control @error('tinggi_badan') is-invalid @enderror" name="tinggi_badan" value="{{ old('tinggi_badan') }}" required autocomplete="tinggi_badan" placeholder="Masukkan tinggi badan">
     
                         @error('tinggi_badan')
                             <span class="invalid-feedback" role="alert">
