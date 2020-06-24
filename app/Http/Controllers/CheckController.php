@@ -55,779 +55,21 @@ class CheckController extends Controller
         $tanggalLahir = Carbon::createFromFormat('Y-m-d', $baby->baby_birthday);
         $tanggalSekarang = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->toDateTimeString());
         $umur = $tanggalSekarang->diffInMonths($tanggalLahir);
-        $beratBadan = $request->berat_badan;
-        $tinggiBadan = $request->tinggi_badan;
-        $peringatan = '';
 
-        if($umur >=0 and $umur <=6){
-            $miu_umur_fase1 = 1;
-        }
-        if($umur >= 6 and $umur <=12){
-            $miu_umur_fase1 = (12-$umur)/6;
-            $miu_umur_fase2 = ($umur-6)/6;
-        }
-        if($umur >= 12 and $umur <= 24){
-            $miu_umur_fase2 = (24-$umur)/12;
-            $miu_umur_fase3 = ($umur-12)/12;
-        }
-        if($umur >= 24 and $umur <= 36){
-            $miu_umur_fase3 = (36-$umur)/12;
-            $miu_umur_fase4 = ($umur-24)/12;
-        }
-        if($umur >= 38 and $umur <= 48){
-            $miu_umur_fase4 = (48-$umur)/12;
-            $miu_umur_fase5 = ($umur-36)/12;
-        }
-        if($umur >= 48 and $umur <=60){
-            $miu_umur_fase5 = 1;
-        }
-        if($umur > 60){
-            $peringatan = 'umur balita tidak boleh lebih dari 60 bulan';
-            return response()->json([
-                'status' => 200,
-                'data' => [
-                    'errorMessage' => $peringatan,
-                ]
-            ]);
-        }
-
-        if($baby->gender == 'L'){
-            if($beratBadan >= 0 and $beratBadan <=7){
-                $miu_bb_ringan = 1;
-            }
-            if($beratBadan >= 7 and $beratBadan <=13){
-                $miu_bb_ringan = (13-$beratBadan)/6;
-                $miu_bb_sedang = ($beratBadan-7)/6;
-            }
-            if($beratBadan >= 13 and $beratBadan <= 19){
-                $miu_bb_sedang = (19-$beratBadan)/6;
-                $miu_bb_berat = ($beratBadan-13)/6;
-            }
-            if($beratBadan >= 19){
-                $miu_bb_berat = 1;
-            }
-
-            if($tinggiBadan >= 0 and $tinggiBadan <=49){
-                $miu_tb_rendah = 1;
-            }
-            if($tinggiBadan >=49 and $tinggiBadan <=75){
-                $miu_tb_rendah = (75-$tinggiBadan)/26;
-                $miu_tb_sedang = ($tinggiBadan-49)/26;
-            }
-            if($tinggiBadan >=75 and $tinggiBadan <=101){
-                $miu_tb_sedang = (101-$tinggiBadan)/26;
-                $miu_tb_tinggi = ($tinggiBadan-75)/26;
-            }
-            if($tinggiBadan >= 101){
-                $miu_tb_tinggi = 1;
-            }
-
-            $alpha = array();
-            $z = array();
-            //Aturan fase I
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase1, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase1, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75)){
-                $minimum = min($miu_umur_fase1, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase1, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase1, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75)){
-                $minimum = min($miu_umur_fase1, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 13) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 13) and ($tinggiBadan >= 75)){
-                $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (12*$minimum)+70;
-                array_push($z, $hitung);
-            }
-
-            //Aturan Fase II
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase2, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase2, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75 )){
-                $minimum = min($miu_umur_fase2, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase2, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase2, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 )){
-                $minimum = min($miu_umur_fase2, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 13) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 13) and ($tinggiBadan >= 75 )){
-                $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (12*$minimum)+70;
-                array_push($z, $hitung);
-            }
-
-            //Aturan Fase III
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase3, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase3, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75)){
-                $minimum = min($miu_umur_fase3, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase3, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-            
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase3, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75)){
-                $minimum = min($miu_umur_fase3, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 13 ) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-            
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 13 ) and ($tinggiBadan >= 75)){
-                $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (12*$minimum)+70;
-                array_push($z, $hitung);
-            }
-
-            //Aturan Fase IV
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase4, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase4, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75)){
-                $minimum = min($miu_umur_fase4, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase4, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase4, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 )){
-                $minimum = min($miu_umur_fase4, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 75 )){
-                $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            //Aturan Fase V
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase5, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            }
-            
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase5, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=13) and ($tinggiBadan >= 75)){
-                $minimum = min($miu_umur_fase5, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase5, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase5, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=19) and ($tinggiBadan >= 75 )){
-                $minimum = min($miu_umur_fase5, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 13) and ($tinggiBadan >= 0 and $tinggiBadan <=75)){
-                $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 49 and $tinggiBadan <=101)){
-                $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 13 ) and ($tinggiBadan >= 75 )){
-                $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-
-            $size = count($alpha);
-            $total =0;
-            $pembagi =0;
-            for($i=0; $i<$size; $i++){
-                $total += $alpha[$i]*$z[$i];
-                $pembagi += $alpha[$i];
-            }
-            $nilaiGizi = $total/$pembagi;
-        }    
-        else if($baby->gender == 'P'){
-            if($beratBadan > 0 and $beratBadan <=7){
-                $miu_bb_ringan = 1;
-            }
-            if($beratBadan > 7 and $beratBadan <=12){
-                $miu_bb_ringan = (12-$beratBadan)/5;
-                $miu_bb_sedang = ($beratBadan-7)/5;
-            }
-            if($beratBadan > 12 and $beratBadan <= 18){
-                $miu_bb_sedang = (18-$beratBadan)/6;
-                $miu_bb_berat = ($beratBadan-12)/6;
-            }
-            if($beratBadan > 18){
-                $miu_bb_berat = 1;
-            }
-
-            if($tinggiBadan > 0 and $tinggiBadan <=48){
-                $miu_tb_rendah = 1;
-            }
-            if($tinggiBadan >48 and $tinggiBadan <=74){
-                $miu_tb_rendah = (75-$tinggiBadan)/26;
-                $miu_tb_sedang = ($tinggiBadan-49)/26;
-            }
-            if($tinggiBadan >74 and $tinggiBadan <=100){
-                $miu_tb_sedang = (101-$tinggiBadan)/26;
-                $miu_tb_tinggi = ($tinggiBadan-75)/26;
-            }
-            if($tinggiBadan > 100){
-                $miu_tb_tinggi = 1;
-            }
-
-            $alpha = array();
-            $z = array();
-            //Aturan fase I
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase1, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase1, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74)){
-                $minimum = min($miu_umur_fase1, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase1, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase1, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74)){
-                $minimum = min($miu_umur_fase1, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 12) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 12) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 0 and $umur <=12) and ($beratBadan >= 12) and ($tinggiBadan >= 74)){
-                $minimum = min($miu_umur_fase1, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (12*$minimum)+70;
-                array_push($z, $hitung);
-            }
-
-            //Aturan Fase II
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase2, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase2, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74)){
-                $minimum = min($miu_umur_fase2, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase2, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase2, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 )){
-                $minimum = min($miu_umur_fase2, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 12 ) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 12 ) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 6 and $umur <=24) and ($beratBadan >= 12 ) and ($tinggiBadan >= 74 )){
-                $minimum = min($miu_umur_fase2, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (12*$minimum)+70;
-                array_push($z, $hitung);
-            }
-
-            //Aturan Fase III
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase3, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase3, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74 )){
-                $minimum = min($miu_umur_fase3, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase3, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-            
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase3, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 )){
-                $minimum = min($miu_umur_fase3, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 12 ) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 12) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-            
-            if(($umur >= 12 and $umur <=36) and ($beratBadan >= 12) and ($tinggiBadan >= 74)){
-                $minimum = min($miu_umur_fase3, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (12*$minimum)+70;
-                array_push($z, $hitung);
-            }
-
-            //Aturan Fase IV
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase4, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase4, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74 )){
-                $minimum = min($miu_umur_fase4, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase4, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase4, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 )){
-                $minimum = min($miu_umur_fase4, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 24 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 74 )){
-                $minimum = min($miu_umur_fase4, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            } 
-
-            //Aturan Fase V
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase5, $miu_bb_ringan, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            }
-            
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase5, $miu_bb_ringan, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 0 and $beratBadan <=12) and ($tinggiBadan >= 74)){
-                $minimum = min($miu_umur_fase5, $miu_bb_ringan, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = 49-(6*$minimum);
-                array_push($z, $hitung);
-            } 
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase5, $miu_bb_sedang, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase5, $miu_bb_sedang, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 7 and $beratBadan <=18) and ($tinggiBadan >= 74 )){
-                $minimum = min($miu_umur_fase5, $miu_bb_sedang, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (6*$minimum)+43;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 0 and $tinggiBadan <=74)){
-                $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_rendah);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 48 and $tinggiBadan <=100)){
-                $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_sedang);
-                array_push($alpha, $minimum);
-                $hitung = (29*$minimum)+53;
-                array_push($z, $hitung);
-            }
-
-            if(($umur >= 36 and $umur <=48) and ($beratBadan >= 12 ) and ($tinggiBadan >= 74)){
-                $minimum = min($miu_umur_fase5, $miu_bb_berat, $miu_tb_tinggi);
-                array_push($alpha, $minimum);
-                $hitung = (5*$minimum)+48;
-                array_push($z, $hitung);
-            }
-            $size = count($alpha);
-            $total =0;
-            $pembagi =0;
-            for($i=0; $i<$size; $i++){
-                $total += $alpha[$i]*$z[$i];
-                $pembagi += $alpha[$i];
-            }
-
-            $nilaiGizi = $total/$pembagi;
-        }
-
-        if($nilaiGizi > 0){
-            if($nilaiGizi < 45.5 ){
-                $statusGizi = 'Gizi Buruk';
-            } else if($nilaiGizi < 50.5){
-                $statusGizi = 'Gizi Kurang';
-            } else if ($nilaiGizi < 61.5){
-                $statusGizi = 'Gizi Normal';
-            } else if($nilaiGizi <76.5){
-                $statusGizi = 'Gizi Lebih';
-            } else{
-                $statusGizi = 'Obesitas';
-            }
+        $arrayAlfa = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['alfa'];
+        $arrayZ = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['z'];
+        $nilaiGizi = array_sum($this->mengaliElemenArray($arrayAlfa, $arrayZ))/array_sum($arrayAlfa);
+
+        if($nilaiGizi < 45.5 ){
+            $statusGizi = 'Gizi Buruk';
+        } else if($nilaiGizi < 50.5){
+            $statusGizi = 'Gizi Kurang';
+        } else if ($nilaiGizi < 61.5){
+            $statusGizi = 'Gizi Normal';
+        } else if($nilaiGizi <76.5){
+            $statusGizi = 'Gizi Lebih';
+        } else{
+            $statusGizi = 'Obesitas';
         }
 
         $check = new Check();
@@ -845,56 +87,328 @@ class CheckController extends Controller
             'status' => 200,
             'data' => [
                 'checkResult' => $check,
-                'bodyWeight' => $beratBadan,
-                'bodyHeight' => $tinggiBadan,
-                'ageMonth' => $umur,
-                'errorMessage' => $peringatan,
+                'baby' => $baby
             ]
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Check  $check
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Check $check)
-    {
-        //
+    private function mengaliElemenArray($array1, $array2){
+        for($i = 0; $i < count($array1); $i++){
+            $arrayBaru[] = $array1[$i] * $array2[$i];
+        }
+        return $arrayBaru;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Check  $check
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Check $check)
-    {
-        //
+    // --------------------------------------------FUNGSI UMUR-----------------------------------------------------
+    private function umurFase1($x){
+        if($x <= 6){
+            return 1;
+        } else if($x <= 12){
+            return (12-$x)/6;
+        } else{
+            return 0;
+        }
+    }
+    private function umurFase2($x){
+        if($x <= 6 || $x >= 24){
+            return 0;
+        } else if($x <= 12){
+            return ($x-6)/6;
+        } else{
+            return (24-$x)/12;
+        }
+    }
+    private function umurFase3($x){
+        if($x <= 12 || $x >= 36){
+            return 0;
+        } else if($x <= 24){
+            return ($x-12)/12;
+        } else{
+            return (36-$x)/12;
+        }
+    }
+    private function umurFase4($x){
+        if($x <= 24 || $x >= 48){
+            return 0;
+        } else if($x <= 36){
+            return ($x-24)/12;
+        } else{
+            return (48-$x)/12;
+        }
+    }
+    private function umurFase5($x){
+        if($x <= 36){
+            return 0;
+        } else if($x <= 48){
+            return ($x-36)/12;
+        } else{
+            return 1;
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Check  $check
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Check $check)
-    {
-        //
+    // ---------------------------------------------FUNGSI BERAT--------------------------------------------------
+    private function beratRingan($x, $kelamin){
+        if($kelamin == 'L'){
+            if($x <= 7){
+                return 1;
+            } else if($x <= 13){
+                return (13 - $x)/6;
+            } else{
+                return 0;
+            }
+        } else if($kelamin == 'P'){
+            if($x <= 7){
+                return 1;
+            } else if($x <= 12){
+                return (12 - $x)/5;
+            } else{
+                return 0;
+            }
+        }
+    }
+    private function beratSedang($x, $kelamin){
+        if($kelamin == 'L'){
+            if($x <= 7 || $x >= 19){
+                return 0;
+            } else if($x <= 13){
+                return ($x - 7)/6;
+            } else{
+                return (19-$x)/6;
+            }
+        } else if($kelamin == 'P'){
+            if($x <= 7 || $x >= 18){
+                return 0;
+            } else if($x <= 12){
+                return ($x - 7)/5;
+            } else{
+                return (18-$x)/6;
+            }
+        }
+    }
+    private function beratBerat($x, $kelamin){
+        if($kelamin == 'L'){
+            if($x <= 13){
+                return 0;
+            } else if($x <= 19){
+                return ($x - 13)/6;
+            } else{
+                return 1;
+            }
+        } else if($kelamin == 'P'){
+            if($x <= 12){
+                return 0;
+            } else if($x <= 12){
+                return ($x - 12)/6;
+            } else{
+                return 1;
+            }
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Check  $check
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Check $check)
-    {
-        //
+    // ------------------------------------------FUNGSI TINGGI------------------------------------------------------
+    private function tinggiRendah($x, $kelamin){
+        if($kelamin == 'L'){
+            if($x <= 49){
+                return 1;
+            } else if($x <= 75){
+                return (75 - $x)/26;
+            } else{
+                return 0;
+            }
+        } else if($kelamin == 'P'){
+            if($x <= 48){
+                return 1;
+            } else if($x <= 74){
+                return (74 - $x)/26;
+            } else{
+                return 0;
+            }
+        }
+    }
+    private function tinggiSedang($x, $kelamin){
+        if($kelamin == 'L'){
+            if($x <= 49 || $x >= 101){
+                return 0;
+            } else if($x <= 75){
+                return ($x - 49)/26;
+            } else{
+                return (101-$x)/26;
+            }
+        } else if($kelamin == 'P'){
+            if($x <= 48 || $x >= 100){
+                return 0;
+            } else if($x <= 74){
+                return ($x - 48)/26;
+            } else{
+                return (100-$x)/26;
+            }
+        }
+    }
+    private function tinggiTinggi($x, $kelamin){
+        if($kelamin == 'L'){
+            if($x <= 75){
+                return 0;
+            } else if($x <= 101){
+                return ($x - 75)/26;
+            } else{
+                return 1;
+            }
+        } else if($kelamin == 'P'){
+            if($x <= 74){
+                return 0;
+            } else if($x <= 100){
+                return ($x - 74)/26;
+            } else{
+                return 1;
+            }
+        }
+    }
+
+    // -----------------------------------------FUNGSI Gizi Buruk
+    private function giziBuruk($alfa){
+        if($alfa == 1){
+            return 43;
+        } else if($alfa == 0){
+            return 49;
+        } else{
+            return 49 - (6*$alfa);
+        }
+    }
+    private function giziKurang($alfa){
+        if($alfa == 0){
+            return 43;
+        } else{
+            return 43 + (6*$alfa);
+        } 
+    }
+    private function giziNormal($alfa){
+        if($alfa == 0){
+            return 49;
+        } else{
+            return 49 + (4*$alfa);
+        } 
+    }
+    private function giziLebih($alfa){
+        if($alfa == 0){
+            return 53;
+        } else{
+            return 53 + (29*$alfa);
+        } 
+    }
+    private function giziObesitas($alfa){
+        if($alfa == 0){
+            return 70;
+        } else{
+            return 70 + (12*$alfa);
+        } 
+    }
+
+    private function aturan($umur, $beratBadan, $tinggiBadan, $jenisKelamin){
+        $alfa = array();
+        $z = array();
+        //FASE 1
+        array_push($alfa, min($this->umurFase1($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[0]));
+        array_push($alfa, min($this->umurFase1($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[1]));
+        array_push($alfa, min($this->umurFase1($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[2]));
+        array_push($alfa, min($this->umurFase1($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[3]));
+        array_push($alfa, min($this->umurFase1($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[4]));
+        array_push($alfa, min($this->umurFase1($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[5]));
+        array_push($alfa, min($this->umurFase1($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[6]));
+        array_push($alfa, min($this->umurFase1($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[7]));
+        array_push($alfa, min($this->umurFase1($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziObesitas($alfa[8]));
+
+        //FASE 2
+        array_push($alfa, min($this->umurFase2($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[9]));
+        array_push($alfa, min($this->umurFase2($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[10]));
+        array_push($alfa, min($this->umurFase2($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[11]));
+        array_push($alfa, min($this->umurFase2($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[12]));
+        array_push($alfa, min($this->umurFase2($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[13]));
+        array_push($alfa, min($this->umurFase2($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[14]));
+        array_push($alfa, min($this->umurFase2($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[15]));
+        array_push($alfa, min($this->umurFase2($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[16]));
+        array_push($alfa, min($this->umurFase2($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziObesitas($alfa[17]));
+
+        //FASE 3
+        array_push($alfa, min($this->umurFase3($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziBuruk($alfa[18]));
+        array_push($alfa, min($this->umurFase3($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziBuruk($alfa[19]));
+        array_push($alfa, min($this->umurFase3($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziBuruk($alfa[20]));
+        array_push($alfa, min($this->umurFase3($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[21]));
+        array_push($alfa, min($this->umurFase3($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[22]));
+        array_push($alfa, min($this->umurFase3($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[23]));
+        array_push($alfa, min($this->umurFase3($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[24]));
+        array_push($alfa, min($this->umurFase3($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[25]));
+        array_push($alfa, min($this->umurFase3($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziObesitas($alfa[26]));
+
+        //FASE 4
+        array_push($alfa, min($this->umurFase4($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[27]));
+        array_push($alfa, min($this->umurFase4($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[28]));
+        array_push($alfa, min($this->umurFase4($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[29]));
+        array_push($alfa, min($this->umurFase4($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[30]));
+        array_push($alfa, min($this->umurFase4($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[31]));
+        array_push($alfa, min($this->umurFase4($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[32]));
+        array_push($alfa, min($this->umurFase4($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[33]));
+        array_push($alfa, min($this->umurFase4($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[34]));
+        array_push($alfa, min($this->umurFase4($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[35]));
+
+        //FASE 5
+        array_push($alfa, min($this->umurFase5($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziBuruk($alfa[36]));
+        array_push($alfa, min($this->umurFase5($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziBuruk($alfa[37]));
+        array_push($alfa, min($this->umurFase5($umur), $this->beratRingan($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziBuruk($alfa[38]));
+        array_push($alfa, min($this->umurFase5($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[39]));
+        array_push($alfa, min($this->umurFase5($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[40]));
+        array_push($alfa, min($this->umurFase5($umur), $this->beratSedang($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziKurang($alfa[41]));
+        array_push($alfa, min($this->umurFase5($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiRendah($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[42]));
+        array_push($alfa, min($this->umurFase5($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiSedang($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziLebih($alfa[43]));
+        array_push($alfa, min($this->umurFase5($umur), $this->beratBerat($beratBadan, $jenisKelamin), $this->tinggiTinggi($tinggiBadan, $jenisKelamin)));
+        array_push($z, $this->giziNormal($alfa[44]));
+
+        return [
+            "alfa" => $alfa,
+            "z" => $z
+        ];
     }
 }
