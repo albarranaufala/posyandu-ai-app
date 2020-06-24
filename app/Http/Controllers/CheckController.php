@@ -15,33 +15,12 @@ class CheckController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $babies = Baby::all();
         return view('checks.index', compact('babies'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request,[
@@ -82,16 +61,16 @@ class CheckController extends Controller
         $check->user_id = Auth::user()->id;
         $check->save();
         
-        $check = Check::with('baby')->find($check->id);
+        $check = Check::with('baby.checks')->find($check->id);
         return response()->json([
             'status' => 200,
             'data' => [
                 'checkResult' => $check,
-                'baby' => $baby
             ]
         ]);
     }
 
+    //MENGALI ANTAR ELEMEN DI ARRAY
     private function mengaliElemenArray($array1, $array2){
         for($i = 0; $i < count($array1); $i++){
             $arrayBaru[] = $array1[$i] * $array2[$i];
@@ -99,7 +78,7 @@ class CheckController extends Controller
         return $arrayBaru;
     }
 
-    // --------------------------------------------FUNGSI UMUR-----------------------------------------------------
+    //FUNGSI UMUR
     private function umurFase1($x){
         if($x <= 6){
             return 1;
@@ -146,7 +125,7 @@ class CheckController extends Controller
         }
     }
 
-    // ---------------------------------------------FUNGSI BERAT--------------------------------------------------
+    //FUNGSI BERAT
     private function beratRingan($x, $kelamin){
         if($kelamin == 'L'){
             if($x <= 7){
@@ -205,7 +184,7 @@ class CheckController extends Controller
         }
     }
 
-    // ------------------------------------------FUNGSI TINGGI------------------------------------------------------
+    //FUNGSI TINGGI
     private function tinggiRendah($x, $kelamin){
         if($kelamin == 'L'){
             if($x <= 49){
@@ -264,7 +243,7 @@ class CheckController extends Controller
         }
     }
 
-    // -----------------------------------------FUNGSI Gizi Buruk
+    //FUNGSI GIZI BURUK
     private function giziBuruk($alfa){
         if($alfa == 1){
             return 43;
@@ -303,6 +282,7 @@ class CheckController extends Controller
         } 
     }
 
+    //ATURAN
     private function aturan($umur, $beratBadan, $tinggiBadan, $jenisKelamin){
         $alfa = array();
         $z = array();

@@ -109,7 +109,7 @@ function renderSearchResult(baby) {
                         </div>
                         <div>
                             <h3 class="mb-3"><strong>Pemeriksaan Balita</strong></h3>
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="max-height:500px">
                                 <table class="table">
                                     <thead>
                                         <tr>

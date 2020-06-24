@@ -104,6 +104,7 @@ function toDetail(babyId) {
     pageBabies.classList.add('d-none');
     pageDetailBaby.innerHTML = renderDetailBaby(baby);
     renderChart(baby.checks);
+    scrollToTop();
 }
 
 function backToBabies(e) {
@@ -183,7 +184,7 @@ function renderDetailBaby(baby) {
         </div>
         <div>
             <h3 class="mb-3"><strong>Pemeriksaan Balita</strong></h3>
-            <div class="table-responsive">
+            <div class="table-responsive" style="max-height:500px">
                 <table class="table">
                     <thead>
                         <tr>
@@ -228,5 +229,12 @@ function renderChart(checks) {
             }]
         });
         chart.render();
+    }
+}
+
+function scrollToTop() {
+    const c = document.documentElement.scrollTop || document.body.scrollTop;
+    if (c > 0) {
+        window.scrollTo(0, 0);
     }
 }

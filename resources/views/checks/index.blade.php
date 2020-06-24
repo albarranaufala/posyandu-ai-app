@@ -56,6 +56,7 @@
 @endsection
 
 @section('scripts-home')
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script defer src="{{asset('js/checks.js')}}"></script>
 @endsection
 
