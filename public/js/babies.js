@@ -63,7 +63,7 @@ function renderBabies(babies) {
         babiesContainer.innerHTML = babies.map(baby => renderBaby(baby))
             .reduce((result, renderBaby) => result + renderBaby);
     } else {
-        babiesContainer.innerHTML = 'Tidak ada anak';
+        babiesContainer.innerHTML = 'Tidak ada balita';
     }
 }
 
@@ -139,15 +139,15 @@ function renderDetailBaby(baby) {
     return `
         <div aria-label="breadcrumb">
             <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#" onclick="backToBabies(event)">Daftar Anak</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Detail Anak</li>
+            <li class="breadcrumb-item"><a href="#" onclick="backToBabies(event)">Daftar Balita</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detail Balita</li>
             </ol>
         </div>
         <div class="alert alert-primary" role="alert">
             <div class="row text-md-center">
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
-                        <div>Nama Anak</div>
+                        <div>Nama Balita</div>
                         <div><strong>${baby.baby_name}</strong></div>
                     </div>
                     <div class="form-group">
@@ -165,7 +165,7 @@ function renderDetailBaby(baby) {
                         <div><strong>${baby.gender}</strong></div>
                     </div>
                     <div class="form-group">
-                        <div>Kode Anak</div>
+                        <div>Kode Balita</div>
                         <div><strong>${baby.unique_code}</strong></div>
                     </div>
                     <div class="form-group mb-0">
@@ -182,7 +182,7 @@ function renderDetailBaby(baby) {
             </div>
         </div>
         <div>
-            <h3 class="mb-3"><strong>Pemeriksaan Anak</strong></h3>
+            <h3 class="mb-3"><strong>Pemeriksaan Balita</strong></h3>
             <div class="table-responsive">
                 <table class="table">
                     <thead>

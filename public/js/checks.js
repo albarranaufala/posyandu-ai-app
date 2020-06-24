@@ -73,7 +73,7 @@ checkForm.addEventListener('submit', async function(e) {
                     <div class="row text-md-center">
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <div>Nama Anak</div>
+                                <div>Nama Balita</div>
                                 <div><strong>${checkResult.baby.baby_name}</strong></div>
                             </div>
                             <div class="form-group">
@@ -91,7 +91,7 @@ checkForm.addEventListener('submit', async function(e) {
                                 <div><strong>${checkResult.baby.gender}</strong></div>
                             </div>
                             <div class="form-group">
-                                <div>Kode Anak</div>
+                                <div>Kode Balita</div>
                                 <div><strong>${checkResult.baby.unique_code}</strong></div>
                             </div>
                             <div class="form-group mb-0">

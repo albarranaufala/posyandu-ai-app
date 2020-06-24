@@ -31,7 +31,7 @@
                                 <form id="login-form" class="w-100" method="POST" action="{{ route('login') }}">
                                     @csrf
                                     <div class="form-group ">
-                                        <label for="Username">{{ __('Username') }}</label>
+                                        <label for="username">{{ __('Username') }}</label>
                                         <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username">
                     
                                         @error('username')
@@ -76,7 +76,7 @@
                                 </form>
                                 <form id="ibu-form" class="hide w-100">
                                     <div class="form-group">
-                                        <label for="Kode Anak">{{ __('Kode Anak') }}</label>
+                                        <label for="kode_anak">{{ __('Kode Balita') }}</label>
                                         <input id="kode_anak" type="text" class="form-control @error('kode_anak') is-invalid @enderror" name="kode_anak" value="{{ old('kode_anak') }}" required autocomplete="kode_anak">
                     
                                         @error('kode_anak')
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-posyandu btn-block">
-                                            {{ __('Cek Anak') }}
+                                            {{ __('Cek Balita') }}
                                         </button>
                                     </div>
                                 </form>

@@ -7,16 +7,16 @@
             <div class="col-12">
                 <div class="card-add-baby">
                     <div id="add-baby-button" class="card-body">
-                        Tambah Anak
+                        Tambah Balita
                     </div>
                     <form id="add-baby-form" class="card-body hide">
                         @csrf
                         <div class="form-group">
-                            <label for="nama_anak">Nama Anak</label>
+                            <label for="nama_anak">Nama Balita</label>
                             <input id="nama_anak" type="text"
                                 class="form-control @error('nama_anak') is-invalid @enderror" name="nama_anak"
                                 value="{{ old('nama_anak') }}" required autocomplete="nama_anak"
-                                placeholder="Masukkan nama anak">
+                                placeholder="Masukkan nama balita">
 
                             @error('nama_anak')
                             <span class="invalid-feedback" role="alert">
@@ -90,7 +90,7 @@
                         </div>
                         <div class="form-group text-right">
                             <button class="btn btn-light" id="cancel-add-button" type="button">Batal</button>
-                            <button class="btn btn-posyandu px-5" type="submit">Daftarkan Anak</button>
+                            <button class="btn btn-posyandu px-5" type="submit">Daftarkan Balita</button>
                         </div>
                     </form>
                 </div>
@@ -98,9 +98,9 @@
         </div>
         <div class="row mt-5">
             <div class="col-12 d-flex flex-wrap justify-content-between">
-                <h3><strong>Data Anak</strong></h3>
+                <h3><strong>Data Balita</strong></h3>
                 <div class="form-group">
-                    <input id="baby-search" type="text" class="form-control" placeholder="Cari anak...">
+                    <input id="baby-search" type="text" class="form-control" placeholder="Cari balita...">
                 </div>
             </div>
             <div class="col-12" id="babies-container">
