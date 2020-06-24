@@ -23,22 +23,26 @@ class CheckController extends Controller
 
     public function store(Request $request)
     {
+        //Validasi
         $this->validate($request,[
             'nama_anak' => 'required',
             'berat_badan' => 'required',
             'tinggi_badan' => 'required'
         ]);
         
+        //Menyiapkan Data yang Diperlukan untuk Fuzzifikasi
         $id = $request->nama_anak;
         $baby = Baby::find($id);
         $tanggalLahir = Carbon::createFromFormat('Y-m-d', $baby->baby_birthday);
         $tanggalSekarang = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->toDateTimeString());
         $umur = $tanggalSekarang->diffInMonths($tanggalLahir);
 
+        //Proses Fuzzifikasi
         $arrayAlfa = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['alfa'];
         $arrayZ = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['z'];
-        $nilaiGizi = array_sum($this->mengaliElemenArray($arrayAlfa, $arrayZ))/array_sum($arrayAlfa);
 
+        //Proses Defuzzifikasi
+        $nilaiGizi = array_sum($this->mengaliElemenArray($arrayAlfa, $arrayZ))/array_sum($arrayAlfa);
         if($nilaiGizi < 45.5 ){
             $statusGizi = 'Gizi Buruk';
         } else if($nilaiGizi < 50.5){
@@ -51,6 +55,7 @@ class CheckController extends Controller
             $statusGizi = 'Obesitas';
         }
 
+        //Menyimpan Data Pemeriksaan
         $check = new Check();
         $check->body_weight = $request->berat_badan;
         $check->body_height = $request->tinggi_badan;
