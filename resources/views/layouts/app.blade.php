@@ -7,10 +7,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SPK Posyandu</title>
+    <title>Posyandu Mangga - Smart Posyandu</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+
+    {{-- logo in title bar --}}
+    <link rel="icon" href="{{ asset('icon/newborn.svg') }}" type="image/gif" sizes="16x16">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
