@@ -2,24 +2,16 @@
 
 @section('home-content')
 <div class="p-3">
-    <div class="d-flex justify-content-between align-items-center flex-wrap my-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
         <h2><strong>Daftar Aturan</strong></h2>
         <div>
-            <button class="btn btn-success">Variabel</button>
+            <a href="/home/sets" class="btn btn-success">Himpunan Variabel</a>
             <button class="btn btn-posyandu" type="button" id="btn-add-rule">Tambah</button>
         </div>
     </div>
     <form class="card-posyandu my-3 d-none" id="form-add-rule">
         @csrf
         <div class="card-body">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="kode">Kode</label>
-                        <input type="text" name="kode" id="kode" class="form-control">
-                    </div>
-                </div>    
-            </div>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="form-group">
