@@ -31,3 +31,8 @@ Route::post('/home/checks', 'CheckController@store')->name('checks.store');
 Route::get('/home/babies', 'BabyController@index')->name('babies');
 Route::get('/babies', 'BabyController@getAllBabies');
 Route::post('/babies', 'BabyController@store');
+
+Route::get('/home/rules', 'RuleController@index')->name('rules');
+Route::post('/rules', 'RuleController@store');
+Route::post('/rules/edit/{id}', 'RuleController@update');
+Route::post('/rules/delete/{id}', 'RuleController@destroy');

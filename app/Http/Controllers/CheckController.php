@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Check;
 use App\Baby;
+use App\Rule;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -38,11 +39,12 @@ class CheckController extends Controller
         $umur = $tanggalSekarang->diffInMonths($tanggalLahir);
 
         //Proses Fuzzifikasi
-        $arrayAlfa = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['alfa'];
-        $arrayZ = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['z'];
+        // $arrayAlfa = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['alfa'];
+        // $arrayZ = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['z'];
 
-        //Proses Defuzzifikasi
-        $nilaiGizi = array_sum($this->mengaliElemenArray($arrayAlfa, $arrayZ))/array_sum($arrayAlfa);
+        // //Proses Defuzzifikasi
+        $nilaiGizi = $this->hitung([$umur, $request->berat_badan, $request->tinggi_badan], $baby->gender);
+        
         if($nilaiGizi < 45.5 ){
             $statusGizi = 'Gizi Buruk';
         } else if($nilaiGizi < 50.5){
@@ -395,5 +397,114 @@ class CheckController extends Controller
             "alfa" => $alfa,
             "z" => $z
         ];
+    }
+
+    public function linearTurun($input, $x, $y){
+        if($input < $x) return 1;
+        else if($input > $y) return 0;
+        else return ($y - $input)/($y - $x);
+    }
+
+    public function linearNaik($input, $x, $y){
+        if($input < $x) return 0;
+        else if($input > $y) return 1;
+        else return ($input - $x)/($y - $x);
+    }
+
+    public function segitiga($input, $x, $y, $z){
+        if($input < $x || $input > $z) return 0;
+        else if($input < $y) return ($input - $x)/($y - $x);
+        else return ($y - $input)/($y - $x);
+    }
+
+    public function zLinearTurun($alfa, $x, $y){
+        if($alfa == 1) return $x;
+        else if($alfa == 0) return $y;
+        else return $y - ($alfa * ($y - $x));
+    }
+
+    public function zLinearNaik($alfa, $x, $y){
+        if($alfa == 1) return $y;
+        else if($alfa == 0) return $x;
+        else return $x + ($alfa * ($y - $x));
+    }
+
+    public function zSegitiga($alfa, $x, $y, $z){
+        if($alfa == 1) return $y;
+        else if($alfa == 0) return $x;
+        else return $x + ($alfa * ($y - $x));
+    }
+
+    public function hitung($inputs, $jenisKelamin){
+        $rules = Rule::all();
+        $alfas = array();
+        $zs = array();
+        //ulangi setiap atusan
+        foreach($rules as $rule){
+            //ulangi setiap himpunan output
+            $alfasLocal = array();
+            $i = 0;
+            foreach($rule->input_sets as $inputSet){
+                $ranges = explode('|', $inputSet->range);
+                //jika rangenya tergantung jenis kelamin
+                if(count($ranges) == 2){
+                    if($jenisKelamin == 'L'){
+                        //jika laki
+                        $input = $inputs[$i];
+                        $range = explode(',', $ranges[0]);
+                        $alfa = $this->cariAlfa($input, $inputSet->curve, $range);
+                    } else if($jenisKelamin == 'P'){
+                        //jika perempuan
+                        $input = $inputs[$i];
+                        $range = explode(',', $ranges[1]);
+                        $alfa = $this->cariAlfa($input, $inputSet->curve, $range);
+                    }
+                } else{
+                    $input = $inputs[$i];
+                    $range = explode(',', $ranges[0]);
+                    $alfa = $this->cariAlfa($input, $inputSet->curve, $range);
+                }
+                array_push($alfasLocal, $alfa);
+                $i++;
+            }
+            $alfaMin = min($alfasLocal);
+            array_push($alfas, $alfaMin);
+            $outputRanges = explode('|', $rule->output_set->range);
+            if(count($outputRanges) == 2){
+                if($jenisKelamin == 'L'){
+                    $outputRange = explode(',', $outputRanges[0]);
+                    $z = $this->cariZ($alfaMin, $rule->output_set->curve, $outputRange);
+                } else if($jenisKelamin == 'P'){
+                    $outputRange = explode(',', $outputRanges[1]);
+                    $z = $this->cariZ($alfaMin, $rule->output_set->curve, $outputRange);
+                }
+            } else{
+                $outputRange = explode(',', $outputRanges[0]);
+                $z = $this->cariZ($alfaMin, $rule->output_set->curve, $outputRange);
+            }
+            array_push($zs, $z);
+        }
+        $nilaiGizi = array_sum($this->mengaliElemenArray($alfas, $zs))/array_sum($alfas);
+        return $nilaiGizi;
+    }
+
+    public function cariAlfa($input, $curve, $range){
+        if($curve == 'linear turun'){
+            return $this->linearTurun($input, $range[0], $range[1]);
+        } else if($curve == 'linear naik'){
+            return $this->linearNaik($input, $range[0], $range[1]);
+        } else if($curve == 'segitiga'){
+            return $this->segitiga($input, $range[0], $range[1], $range[2]);
+        }
+    }
+
+    public function cariZ($alfa, $curve, $range){
+        if($curve == 'linear turun'){
+            return $this->zLinearTurun($alfa, $range[0], $range[1]);
+        } else if($curve == 'linear naik'){
+            return $this->zLinearNaik($alfa, $range[0], $range[1]);
+        } else if($curve == 'segitiga'){
+            return $this->zSegitiga($alfa, $range[0], $range[1], $range[2]);
+        }
     }
 }

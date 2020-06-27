@@ -149,7 +149,7 @@ h1 {
 }
 
 .home-container {
-    max-width: 576px;
+    max-width: 768px;
     width: 100%;
     padding-right: 1em;
     padding-left: 1em;
@@ -186,6 +186,7 @@ nav li:not(:last-child) {
     padding: 1.75em 1em;
     text-transform: uppercase;
     text-align: center;
+    vertical-align: middle;
 }
 
 nav .animation {
@@ -201,32 +202,50 @@ nav .animation {
 }
 
 nav li:nth-child(1).active~.animation {
-    width: 33.3333%;
+    left: 0;
+    width: 25%;
 }
 
 nav li:nth-child(2).active~.animation {
-    width: 33.3333%;
-    left: 33.3333%;
+    width: 25%;
+    left: 25%;
 }
 
 nav li:nth-child(3).active~.animation {
-    width: 33.3333%;
-    left: 66.6666%;
+    width: 25%;
+    left: 50%;
+}
+
+nav li:nth-child(4).active~.animation {
+    width: 25%;
+    left: 75%;
 }
 
 nav li:nth-child(1):hover~.animation {
     left: 0;
-    width: 33.3333%;
+    width: 25%;
 }
 
 nav li:nth-child(2):hover~.animation {
-    width: 33.3333%;
-    left: 33.3333%;
+    width: 25%;
+    left: 25%;
 }
 
 nav li:nth-child(3):hover~.animation {
-    width: 33.3333%;
-    left: 66.6666%;
+    width: 25%;
+    left: 50%;
+}
+
+nav li:nth-child(4):hover~.animation {
+    width: 25%;
+    left: 75%;
+}
+
+.card-posyandu {
+    border-radius: 30px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
 
 .card-add-baby {
@@ -300,4 +319,13 @@ nav li:nth-child(3):hover~.animation {
 .nilai-gizi {
     font-size: 60px;
     font-weight: bold;
+}
+
+.icon-posyandu {
+    color: rgba(255, 0, 155, 1);
+    cursor: pointer;
+}
+
+.icon-posyandu:hover {
+    color: rgba(14, 9, 121, 1);
 }
