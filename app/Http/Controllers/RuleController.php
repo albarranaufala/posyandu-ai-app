@@ -9,6 +9,11 @@ use App\Set;
 
 class RuleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(){
         $rules = Rule::with('output_set')->with('input_sets')->get();
         $variables = Variable::with('sets')->get();
@@ -36,7 +41,6 @@ class RuleController extends Controller
     
     public function store(Request $request){
         $rule = new Rule();
-        $rule->code = $request->kode;
         $rule->output_set_id = $request->nilai_gizi;
         $rule->save();
         $rule->input_sets()->sync([$request->umur, $request->berat_badan, $request->tinggi_badan]);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rule extends Model
 {
-    protected $fillable = ['code', 'output_set_id'];
+    protected $fillable = ['output_set_id'];
 
     public function output_set(){
         return $this->belongsTo('App\Set', 'output_set_id');

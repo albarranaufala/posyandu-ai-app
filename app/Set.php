@@ -11,4 +11,11 @@ class Set extends Model
     public function variable(){
         return $this->belongsTo('App\Variable');
     }
+
+    public function input_rules(){
+        return $this->belongsToMany('App\Rule', 'rule_set');
+    }
+    public function output_rules(){
+        return $this->hasMany('App\Rule', 'output_set_id');
+    }
 }

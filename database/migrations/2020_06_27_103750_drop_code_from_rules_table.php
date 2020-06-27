@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddGenderToSetsTable extends Migration
+class DropCodeFromRulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddGenderToSetsTable extends Migration
      */
     public function up()
     {
-        Schema::table('sets', function (Blueprint $table) {
-            $table->string('gender');
+        Schema::table('rules', function (Blueprint $table) {
+            $table->dropColumn('code');
         });
     }
 
@@ -25,8 +25,8 @@ class AddGenderToSetsTable extends Migration
      */
     public function down()
     {
-        Schema::table('sets', function (Blueprint $table) {
-            $table->dropColumn('gender');
+        Schema::table('rules', function (Blueprint $table) {
+            $table->string('code');
         });
     }
 }

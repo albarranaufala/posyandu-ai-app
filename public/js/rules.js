@@ -129,24 +129,29 @@ function listenerDeleteButton(){
 
 function renderTable(rules) {
     rulesContainer.innerHTML =
-        `<div class = "table-responsive">
-            <table class = "table table-borderless mb-0">
-                <tr>
-                    <th scope = "row">Kode</th>
-                    <th>Umur</th> 
-                    <th>Berat Badan</th> 
-                    <th>Tinggi Badan</th> 
-                    <th>Status Gizi</th> 
-                </tr>
-                ${renderRules(rules)}
-            </table>
+        `<div class="card-posyandu">
+            <div class="card-body">
+                <div class = "table-responsive">
+                    <table class = "table table-borderless mb-0">
+                        <tr>
+                            <th scope = "row">No.</th>
+                            <th>Umur</th> 
+                            <th>Berat Badan</th> 
+                            <th>Tinggi Badan</th> 
+                            <th>Status Gizi</th> 
+                            <th></th> 
+                        </tr>
+                        ${renderRules(rules)}
+                    </table>
+                </div>
+            </div>
         </div>`
 }
 
 function renderRules(rules) {
-    return rules.map(rule => {
-        return `<tr class = "card-posyandu" data-rule-id = "${rule.id}">
-                    <td scope = "row" > ${rule.code} </td>
+    return rules.map((rule,i) => {
+        return `<tr data-rule-id = "${rule.id}">
+                    <td>${i+1}</td>
                     ${renderInputSets(rule)}
                     <td>${rule.output_set.name}</td> 
                     <td><i class = "material-icons icon-posyandu edit-icon" data-rule-id = "${rule.id}">edit</i><i class = "material-icons icon-posyandu delete-icon" data-rule-id = "${rule.id}">delete</i></td>
