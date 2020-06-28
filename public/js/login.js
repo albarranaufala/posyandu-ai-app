@@ -91,7 +91,7 @@ function renderSearchResult(baby) {
                                         <div><strong>${baby.gender}</strong></div>
                                     </div>
                                     <div class="form-group">
-                                        <div>Kode Balita</div>
+                                        <div>NIK Balita</div>
                                         <div><strong>${baby.unique_code}</strong></div>
                                     </div>
                                     <div class="form-group mb-0">

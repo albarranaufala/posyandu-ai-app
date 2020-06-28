@@ -76,7 +76,7 @@
                                 </form>
                                 <form id="ibu-form" class="hide w-100">
                                     <div class="form-group">
-                                        <label for="kode_anak">{{ __('Kode Balita') }}</label>
+                                        <label for="kode_anak">{{ __('NIK Balita') }}</label>
                                         <input id="kode_anak" type="text" class="form-control @error('kode_anak') is-invalid @enderror" name="kode_anak" value="{{ old('kode_anak') }}" required autocomplete="kode_anak">
                     
                                         @error('kode_anak')

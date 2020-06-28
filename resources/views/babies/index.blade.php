@@ -12,6 +12,19 @@
                     <form id="add-baby-form" class="card-body hide">
                         @csrf
                         <div class="form-group">
+                            <label for="nik_anak">NIK Balita</label>
+                            <input id="nik_anak" type="text"
+                                class="form-control @error('nik_anak') is-invalid @enderror" name="nik_anak"
+                                value="{{ old('nik_anak') }}" required autocomplete="nik_anak"
+                                placeholder="Masukkan NIK balita">
+
+                            @error('nik_anak')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="nama_anak">Nama Balita</label>
                             <input id="nama_anak" type="text"
                                 class="form-control @error('nama_anak') is-invalid @enderror" name="nama_anak"

@@ -28,15 +28,9 @@ class BabyController extends Controller
     }
 
     public function store(Request $request){
-        $huruf = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 
-        'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
-        $uniqueCode = '';
-        for($i=0; $i<10; $i++){
-            $angka = rand(0, 25);
-            $uniqueCode = $uniqueCode.$huruf[$angka];
-        }
 
         $this->validate($request,[
+            'nik_anak' => 'required',
             'nama_anak' => 'required',
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required',
@@ -52,7 +46,7 @@ class BabyController extends Controller
             'address' => $request->alamat,
             'gender' => $request->jenis_kelamin,
             'contact' => $request->kontak,
-            'unique_code' => $uniqueCode
+            'unique_code' => $request->nik_anak
         ]);
         $babies = Baby::with('checks')->orderBy('baby_name')->get();
         return response()->json([
