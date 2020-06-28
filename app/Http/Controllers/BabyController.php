@@ -17,7 +17,7 @@ class BabyController extends Controller
     }
 
     public function getAllBabies(){
-        $babies = Baby::with('checks')->orderBy('created_at', 'desc')->get();
+        $babies = Baby::with('checks')->orderBy('baby_name')->get();
 
         return response()->json([
             'status' => 200,
@@ -54,7 +54,7 @@ class BabyController extends Controller
             'contact' => $request->kontak,
             'unique_code' => $uniqueCode
         ]);
-        $babies = Baby::with('checks')->orderBy('created_at', 'desc')->get();
+        $babies = Baby::with('checks')->orderBy('baby_name')->get();
         return response()->json([
             'status' => 200,
             'data' => [

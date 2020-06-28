@@ -203,42 +203,32 @@ nav .animation {
 
 nav li:nth-child(1).active~.animation {
     left: 0;
-    width: 25%;
+    width: 33.333%;
 }
 
 nav li:nth-child(2).active~.animation {
-    width: 25%;
-    left: 25%;
+    width: 33.333%;
+    left: 33.333%;
 }
 
 nav li:nth-child(3).active~.animation {
-    width: 25%;
-    left: 50%;
-}
-
-nav li:nth-child(4).active~.animation {
-    width: 25%;
-    left: 75%;
+    width: 33.333%;
+    left: 66.666%;
 }
 
 nav li:nth-child(1):hover~.animation {
     left: 0;
-    width: 25%;
+    width: 33.333%;
 }
 
 nav li:nth-child(2):hover~.animation {
-    width: 25%;
-    left: 25%;
+    width: 33.333%;
+    left: 33.333%;
 }
 
 nav li:nth-child(3):hover~.animation {
-    width: 25%;
-    left: 50%;
-}
-
-nav li:nth-child(4):hover~.animation {
-    width: 25%;
-    left: 75%;
+    width: 33.333%;
+    left: 66.666%;
 }
 
 .card-posyandu {

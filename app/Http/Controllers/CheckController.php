@@ -22,25 +22,13 @@ class CheckController extends Controller
         return view('checks.index', compact('babies'));
     }
 
-    public function store(Request $request)
-    {
-        //Validasi
-        $this->validate($request,[
-            'nama_anak' => 'required',
-            'berat_badan' => 'required',
-            'tinggi_badan' => 'required'
-        ]);
-        
+    public function store($id, Request $request)
+    {   
         //Menyiapkan Data yang Diperlukan untuk Fuzzifikasi
-        $id = $request->nama_anak;
         $baby = Baby::find($id);
         $tanggalLahir = Carbon::createFromFormat('Y-m-d', $baby->baby_birthday);
         $tanggalSekarang = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->toDateTimeString());
         $umur = $tanggalSekarang->diffInMonths($tanggalLahir);
-
-        //Proses Fuzzifikasi
-        // $arrayAlfa = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['alfa'];
-        // $arrayZ = $this->aturan($umur, $request->berat_badan, $request->tinggi_badan, $baby->gender)['z'];
 
         // //Proses Defuzzifikasi
         $nilaiGizi = $this->hitung([$umur, $request->berat_badan, $request->tinggi_badan], $baby->gender);
@@ -73,6 +61,7 @@ class CheckController extends Controller
             'status' => 200,
             'data' => [
                 'checkResult' => $check,
+                'babies' => Baby::with('checks')->orderBy('baby_name')->get()
             ]
         ]);
     }

@@ -109,6 +109,7 @@ function toDetail(babyId) {
 
 function backToBabies(e) {
     e.preventDefault();
+    renderBabies(babies)
     pageBabies.classList.remove('d-none');
     pageDetailBaby.innerHTML = '';
 }
@@ -117,6 +118,7 @@ function renderBabyChecks(checks) {
     if (checks.length == 0) {
         return `<tr><td colspan='6'>Belum melakukan pemeriksaan</td></tr>`;
     }
+    checks.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     return checks.map((check, index) => renderBabyCheck(check, index))
         .reduce((finalRender, renderBabyCheck) => finalRender + renderBabyCheck);
 }
@@ -136,6 +138,95 @@ function renderBabyCheck(check, order) {
             </tr>`;
 }
 
+function expandCheckForm(e){
+    const checkForm = document.getElementById('check-form');
+    const btnCheckBaby = document.getElementById('btn-check-baby');
+    btnCheckBaby.classList.add('d-none');
+    checkForm.classList.remove('d-none');
+}
+
+function shrinkCheckForm(e){
+    const checkForm = document.getElementById('check-form');
+    const btnCheckBaby = document.getElementById('btn-check-baby');
+    btnCheckBaby.classList.remove('d-none');
+    checkForm.classList.add('d-none');
+}
+
+async function submitCheck(e){
+    e.preventDefault();
+    const loading = document.getElementById('loading');
+    const form = document.getElementById('check-form');
+    const url = form.action;
+    form.classList.add('d-none');
+    loading.classList.remove('d-none');
+    let data = await checkFetch(url);
+    let checkResult = data.checkResult;
+    babies = data.babies;
+    loading.classList.add('d-none');
+    const checkResultDom = document.getElementById('check-result');
+    checkResultDom.classList.remove('d-none');
+    checkResultDom.innerHTML = renderCheckResult(checkResult);
+}
+
+async function checkFetch(url){
+    await fetch(url, {
+        method: 'post',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRF-Token": csrfToken
+        },
+        credentials: "same-origin",
+        body: 
+            JSON.stringify({
+                berat_badan: document.getElementById('berat_badan').value,
+                tinggi_badan: document.getElementById('tinggi_badan').value
+            })
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(json) {
+        data = json.data;
+    })
+    .catch(function(error) {
+        data = 'error';
+    });
+    return data;
+}
+
+function renderCheckResult(checkResult){
+    return `
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="nilai-gizi-label">Nilai Gizi</div>
+            <div class="nilai-gizi">${checkResult.nutritional_value.toFixed(2)}</div>
+            <div class="">${checkResult.nutritional_status}</div>
+        </div>
+    </div>
+    <div class="row my-3 text-center">
+        <div class="col-4">
+            <div><strong>${checkResult.age}</strong></div>
+            <div>Umur (bulan)</div>
+        </div>
+        <div class="col-4">
+            <div><strong>${checkResult.body_weight}</strong> </div>
+            <div>Berat Badan (kg)</div>
+        </div>
+        <div class="col-4">
+            <div><strong>${checkResult.body_height}</strong></div>
+            <div>Tinggi Badan (cm)</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-right">
+            <button id="btn-done" type="button" onclick="toDetail(${checkResult.baby.id})" class="btn btn-posyandu px-5">Selesai</button>
+        </div>
+    </div>
+    `
+}
+
 function renderDetailBaby(baby) {
     return `
         <div aria-label="breadcrumb">
@@ -143,6 +234,36 @@ function renderDetailBaby(baby) {
             <li class="breadcrumb-item"><a href="#" onclick="backToBabies(event)">Daftar Balita</a></li>
             <li class="breadcrumb-item active" aria-current="page">Detail Balita</li>
             </ol>
+        </div>
+        <div class="card-add-baby mb-3">
+            <div class="card-body d-none" id="check-result">
+                
+            </div>
+            <div class="card-body d-none" id="loading">
+                <div style="height:250px" class="d-flex justify-content-center align-items-center">
+                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                </div>
+            </div>
+            <div class="card-body" id="btn-check-baby" onclick="expandCheckForm(event)">
+                <strong>Periksakan Sekarang</strong>
+            </div>
+            <form id="check-form" class="card-body d-none" action="/babies/check/${baby.id}" onsubmit="submitCheck(event)">
+                <div class="form-group">
+                    <strong>Periksa Balita</strong>
+                </div>
+                <div class="form-group">
+                    <label for="berat_badan">Berat badan balita (kg)</label>
+                    <input step="0.001" id="berat_badan" type="number" class="form-control" name="berat_badan" required autocomplete="berat_badan" placeholder="Masukkan berat badan">
+                </div>
+                <div class="form-group">
+                    <label for="tinggi_badan">Tinggi badan balita (cm)</label>
+                    <input step="0.001" id="tinggi_badan" type="number" class="form-control" name="tinggi_badan" required autocomplete="tinggi_badan" placeholder="Masukkan tinggi badan">
+                </div>
+                <div class="form-group text-right mb-0">
+                    <button class="btn btn-light" type="button" onclick="shrinkCheckForm(event)">Batal</button>
+                    <button class="btn btn-posyandu px-5" type="submit">Periksa</button>
+                </div>
+            </form>
         </div>
         <div class="alert alert-primary" role="alert">
             <div class="row text-md-center">

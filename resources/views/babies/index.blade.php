@@ -122,6 +122,9 @@
 @endsection
 
 @section('scripts-home')
+<script>
+    let csrfToken = @json(csrf_token());
+</script>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script defer src="{{asset('js/babies.js')}}"></script>
 @endsection

@@ -1,12 +1,12 @@
 const nav = document.querySelector('nav');
-const toChecksButton = document.getElementById('to-checks-button');
+// const toChecksButton = document.getElementById('to-checks-button');
 const toBabiesButton = document.getElementById('to-babies-button');
 const toRulesButton = document.getElementById('to-rules-button');
 const toLogoutButton = document.getElementById('to-logout-button');
 
-toChecksButton.addEventListener('click', function() {
-    location.href = '/home/checks';
-})
+// toChecksButton.addEventListener('click', function() {
+//     location.href = '/home/checks';
+// })
 toBabiesButton.addEventListener('click', function() {
     location.href = '/home/babies';
 })

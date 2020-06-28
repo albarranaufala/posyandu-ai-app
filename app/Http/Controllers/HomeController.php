@@ -23,6 +23,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return redirect('/home/checks');
+        return redirect('/home/babies');
     }
 }
