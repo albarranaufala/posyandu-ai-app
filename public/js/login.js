@@ -139,6 +139,7 @@ function renderBabyChecks(checks) {
     if (checks.length == 0) {
         return `<tr><td colspan='6'>Belum melakukan pemeriksaan</td></tr>`;
     }
+    checks.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     return checks.map((check, index) => renderBabyCheck(check, index))
         .reduce((finalRender, renderBabyCheck) => finalRender + renderBabyCheck);
 }
