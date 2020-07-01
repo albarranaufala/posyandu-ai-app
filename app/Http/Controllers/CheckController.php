@@ -27,7 +27,8 @@ class CheckController extends Controller
         //Menyiapkan Data yang Diperlukan untuk Fuzzifikasi
         $baby = Baby::find($id);
         $tanggalLahir = Carbon::createFromFormat('Y-m-d', $baby->baby_birthday);
-        $tanggalSekarang = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->toDateTimeString());
+        // $tanggalSekarang = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->toDateTimeString());
+        $tanggalSekarang = Carbon::createFromFormat('Y-m-d', '2020-07-13');
         $umur = $tanggalSekarang->diffInMonths($tanggalLahir);
 
         // //Proses Defuzzifikasi

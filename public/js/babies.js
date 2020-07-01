@@ -332,7 +332,8 @@ function renderChart(checks) {
     if (checks.length) {
         document.getElementById('chartContainer').style.height = '300px'
         document.getElementById('chartContainer').style.width = '100%'
-        let nutritionalValueDatas = checks.map(check => {
+        let nutritionalValueDatas = checks.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+        .map(check => {
             return {
                 y: check.nutritional_value
             }
