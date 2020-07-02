@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Set;
 use App\Variable;
+use Illuminate\Support\Facades\DB;
 
 class SetController extends Controller
 {
@@ -14,7 +15,8 @@ class SetController extends Controller
     }
 
     public function index(){
-        $sets = Set::all();
+        $sets = DB::table('sets')->join('variables', 'variables.id', '=', 'sets.variable_id')
+        ->select('sets.*', "variables.name as variable_name")->orderBy('variable_name')->get();
         $variables = Variable::all();
         return view('sets.index', [
             "sets" => $sets,

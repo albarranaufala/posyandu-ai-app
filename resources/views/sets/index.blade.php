@@ -84,7 +84,7 @@
                     @foreach ($sets as $set)
                     <tr>
                         <td scope = "row">{{$loop->iteration}}</td>
-                        <td>{{$set->variable->name}}</td> 
+                        <td>{{$set->variable_name}}</td> 
                         <td>{{$set->name}}</td> 
                         <td>{{$set->range}}</td> 
                         <td>{{$set->curve}}</td> 
